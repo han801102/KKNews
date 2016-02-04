@@ -1,0 +1,30 @@
+<rss>
+	<channel>
+		<title>精選歌單</title>
+		<url>https://www.kkbox.com/tw/tc/rss/playlists.xml</url>
+	</channel>
+	<channel>
+		<title>達人聽音樂</title>
+		<url>https://www.kkbox.com/tw/tc/rss/reviews.xml</url>
+	</channel>
+	<channel>
+		<title>主題音樂館</title>
+		<url>https://www.kkbox.com/tw/tc/rss/features.xml</url>
+	</channel>
+	<channel>
+		<title>娛樂新聞</title>
+		<url>https://www.kkbox.com/tw/tc/rss/showbiz.xml</url>
+	</channel>
+	<channel>
+		<title>音樂大人物</title>
+		<url>https://www.kkbox.com/tw/tc/rss/interviews.xml</url>
+	</channel>
+	<channel>
+		<title>現場直擊</title>
+		<url>https://www.kkbox.com/tw/tc/rss/live_reviews.xml</url>
+	</channel>
+	<channel>
+		<title>綜合專欄</title>
+		<url>https://www.kkbox.com/tw/tc/rss/column.xml</url>
+	</channel>
+</rss>

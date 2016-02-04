@@ -5,4 +5,8 @@
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="navigation_drawer_close">Close navigation drawer</string>
 
+	<string name="channel_fragment_name">嚴選專欄</string>
+	<string name="personal_fragment_name">個人精選</string>
+	<string name="setting_fragment_name">設定</string>
+
 </resources>

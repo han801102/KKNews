@@ -8,16 +8,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-
-import java.io.FileReader;
 
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
 	private static final String LOG_TAG = "MainActivity";
 	private DrawerLayout mDrawer;
 	private Toolbar toolbar;
+	private FragmentChannels fragmentChannels = null;
+	private FragmentPersonal fragmentPersonal = null;
+	private FragmentSetting fragmentSettings = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,10 @@ public class MainActivity extends AppCompatActivity
 		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
 
-		setFragment(new FragmentNews());
+		if(fragmentChannels == null) {
+			fragmentChannels = new FragmentChannels();
+		}
+		setFragment(fragmentChannels);
 	}
 
 	@Override
@@ -43,23 +46,34 @@ public class MainActivity extends AppCompatActivity
 		Fragment fragment = null;
 		switch (item.getItemId()) {
 			case R.id.nav_news:
-				fragment = new FragmentNews();
+				if (fragmentChannels == null) {
+					fragmentChannels = new FragmentChannels();
+				}
+				fragment = fragmentChannels;
 				break;
 			case R.id.nav_personal:
-				fragment = new FragmentPersonal();
+				if (fragmentPersonal == null) {
+					fragmentPersonal = new FragmentPersonal();
+				}
+				fragment = fragmentPersonal;
 				break;
 			case R.id.nav_setting:
-				fragment = new FragmentSetting();
+				if (fragmentSettings == null) {
+					fragmentSettings = new FragmentSetting();
+				}
+				fragment = fragmentSettings;
 				break;
 			default:
-				fragment = new FragmentNews();
+				if (fragmentChannels == null) {
+					fragmentChannels = new FragmentChannels();
+				}
+				fragment = fragmentChannels;
 				break;
 		}
 
 		setFragment(fragment);
 
 		item.setChecked(true);
-		setTitle(item.getTitle());
 		mDrawer.closeDrawers();
 
 		return true;
