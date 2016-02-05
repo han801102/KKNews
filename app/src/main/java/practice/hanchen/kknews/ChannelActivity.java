@@ -5,8 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.os.Bundle;
-
-import android.util.Log;
+import android.widget.TextView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,13 +21,18 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class ChannelActivity extends AppCompatActivity {
-
+	private String channelTitle;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_channel);
 		Bundle extras = getIntent().getExtras();
 		String url = extras.getString("url");
+		channelTitle = extras.getString("title");
+
+		TextView lableChannelTitle = (TextView) findViewById(R.id.lable_channel_title);
+		lableChannelTitle.setText(channelTitle);
+
 		new GetResponseTack().execute(url);
 	}
 

@@ -20,6 +20,7 @@ public class ChannelsAdapter extends RecyclerView.Adapter<ChannelsAdapter.ViewHo
 	private Context mContext;
 	private LayoutInflater mInflater;
 	private static final String LOG_TAG = "ChannelsAdapter";
+
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		private final TextView textView;
 
@@ -27,6 +28,7 @@ public class ChannelsAdapter extends RecyclerView.Adapter<ChannelsAdapter.ViewHo
 			super(v);
 			textView = (TextView) v.findViewById(R.id.lable_channels);
 		}
+
 		public TextView getTextView() {
 			return textView;
 		}
@@ -50,9 +52,10 @@ public class ChannelsAdapter extends RecyclerView.Adapter<ChannelsAdapter.ViewHo
 		holder.getTextView().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(mContext,ChannelActivity.class);
+				Intent intent = new Intent(mContext, ChannelActivity.class);
 				Bundle bundle = new Bundle();
 				bundle.putString("url", getURL(position));
+				bundle.putString("title", channelInfoArrayList.get(position).getTitle());
 				intent.putExtras(bundle);
 				mContext.startActivity(intent);
 			}
