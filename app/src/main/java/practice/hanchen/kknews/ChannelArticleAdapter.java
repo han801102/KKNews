@@ -20,13 +20,9 @@ import de.greenrobot.dao.query.QueryBuilder;
  * Created by HanChen on 2016/2/5.
  */
 public class ChannelArticleAdapter extends ArticleAdapter {
-	private Context mContext;
-	private List<PersonalList> personalList;
 
 	public ChannelArticleAdapter(Context context, List<PersonalList> personalList) {
 		super(context, personalList);
-		mContext = context;
-		this.personalList = personalList;
 	}
 
 	@Override
@@ -42,7 +38,7 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 				personalFolderDialog.setTitle("加入個人精選");
 				personalFolderDialog.setView(layoutPersonalFolderDialog);
 
-				final GridView listviewPersonalFolder = (GridView) layoutPersonalFolderDialog.findViewById(R.id.listview_personal_folder);
+				GridView listviewPersonalFolder = (GridView) layoutPersonalFolderDialog.findViewById(R.id.listview_personal_folder);
 				DialogFolderAdapter folderAdapter = new DialogFolderAdapter(mContext, getFolder());
 				listviewPersonalFolder.setAdapter(folderAdapter);
 

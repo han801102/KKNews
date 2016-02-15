@@ -21,8 +21,8 @@ import de.greenrobot.dao.query.QueryBuilder;
  * Created by HanChen on 2016/2/5.
  */
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder> {
-	private List<PersonalList> personalList;
-	private Context mContext;
+	protected List<PersonalList> personalList;
+	protected Context mContext;
 	private static final String LOG_TAG = "ChannelDataAdapter";
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
