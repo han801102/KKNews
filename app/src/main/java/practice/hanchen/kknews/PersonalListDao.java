@@ -26,6 +26,7 @@ public class PersonalListDao extends AbstractDao<PersonalList, Void> {
         public final static Property FolderId = new Property(0, Integer.class, "folderId", false, "FOLDER_ID");
         public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
         public final static Property PicURL = new Property(2, String.class, "picURL", false, "PIC_URL");
+        public final static Property Description = new Property(3, String.class, "description", false, "DESCRIPTION");
     };
 
 
@@ -43,7 +44,8 @@ public class PersonalListDao extends AbstractDao<PersonalList, Void> {
         db.execSQL("CREATE TABLE " + constraint + "\"PERSONAL_LIST\" (" + //
                 "\"FOLDER_ID\" INTEGER," + // 0: folderId
                 "\"TITLE\" TEXT NOT NULL ," + // 1: title
-                "\"PIC_URL\" TEXT NOT NULL );"); // 2: picURL
+                "\"PIC_URL\" TEXT NOT NULL ," + // 2: picURL
+                "\"DESCRIPTION\" TEXT NOT NULL );"); // 3: description
     }
 
     /** Drops the underlying database table. */
@@ -63,6 +65,7 @@ public class PersonalListDao extends AbstractDao<PersonalList, Void> {
         }
         stmt.bindString(2, entity.getTitle());
         stmt.bindString(3, entity.getPicURL());
+        stmt.bindString(4, entity.getDescription());
     }
 
     /** @inheritdoc */
@@ -77,7 +80,8 @@ public class PersonalListDao extends AbstractDao<PersonalList, Void> {
         PersonalList entity = new PersonalList( //
             cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0), // folderId
             cursor.getString(offset + 1), // title
-            cursor.getString(offset + 2) // picURL
+            cursor.getString(offset + 2), // picURL
+            cursor.getString(offset + 3) // description
         );
         return entity;
     }
@@ -88,6 +92,7 @@ public class PersonalListDao extends AbstractDao<PersonalList, Void> {
         entity.setFolderId(cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0));
         entity.setTitle(cursor.getString(offset + 1));
         entity.setPicURL(cursor.getString(offset + 2));
+        entity.setDescription(cursor.getString(offset + 3));
      }
     
     /** @inheritdoc */

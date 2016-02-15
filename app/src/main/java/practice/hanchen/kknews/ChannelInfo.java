@@ -1,4 +1,4 @@
- package practice.hanchen.kknews;
+package practice.hanchen.kknews;
 
 /**
  * Created by HanChen on 2016/2/2.
@@ -20,5 +20,4 @@ public class ChannelInfo {
 		this.title = title;
 		this.url = url;
 	}
-
 }

@@ -11,14 +11,17 @@ public class PersonalList {
     private String title;
     /** Not-null value. */
     private String picURL;
+    /** Not-null value. */
+    private String description;
 
     public PersonalList() {
     }
 
-    public PersonalList(Integer folderId, String title, String picURL) {
+    public PersonalList(Integer folderId, String title, String picURL, String description) {
         this.folderId = folderId;
         this.title = title;
         this.picURL = picURL;
+        this.description = description;
     }
 
     public Integer getFolderId() {
@@ -47,6 +50,16 @@ public class PersonalList {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setPicURL(String picURL) {
         this.picURL = picURL;
+    }
+
+    /** Not-null value. */
+    public String getDescription() {
+        return description;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

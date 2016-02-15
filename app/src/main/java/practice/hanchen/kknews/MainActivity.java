@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity
 		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
 
-		if(fragmentChannels == null) {
+		if (fragmentChannels == null) {
 			fragmentChannels = new FragmentChannels();
 		}
 		setFragment(fragmentChannels);

@@ -12,13 +12,13 @@
 		tools:context="practice.hanchen.kknews.ChannelActivity">
 
 	<TextView
-			android:id="@+id/label_channel_title"
+			android:id="@+id/label_page_title"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:textSize="30sp"/>
 
 	<android.support.v7.widget.RecyclerView
-			android:id="@+id/listview_channel_data"
+			android:id="@+id/listview_article_data"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"/>
 </LinearLayout>

@@ -21,6 +21,6 @@ public class KKNewsDaoGenerator {
 		personalList.addIntProperty("folderId");
 		personalList.addStringProperty("title").notNull();
 		personalList.addStringProperty("picURL").notNull();
-
+		personalList.addStringProperty("description").notNull();
 	}
 }
