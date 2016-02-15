@@ -12,6 +12,7 @@ public class PersonalArticleAdapter extends ArticleAdapter {
 		super(context, personalList);
 	}
 
+	@Override
 	public void onBindViewHolder(final ViewHolder holder, final int position) {
 		super.onBindViewHolder(holder, position);
 	}

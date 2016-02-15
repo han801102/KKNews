@@ -12,4 +12,14 @@
 			android:id="@+id/text_folder_name"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"/>
+	<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="請選擇要加入的資料夾"/>
+	<GridView
+			android:id="@+id/listview_personal_folder"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:numColumns="2"
+			android:stretchMode="columnWidth"/>
 </LinearLayout>

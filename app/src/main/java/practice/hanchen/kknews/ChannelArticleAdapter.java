@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 		this.personalList = personalList;
 	}
 
+	@Override
 	public void onBindViewHolder(final ViewHolder holder, final int position) {
 		super.onBindViewHolder(holder, position);
 		holder.getView().setOnLongClickListener(new View.OnLongClickListener() {
@@ -39,9 +41,15 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 				AlertDialog.Builder personalFolderDialog = new AlertDialog.Builder(v.getContext());
 				personalFolderDialog.setTitle("加入個人精選");
 				personalFolderDialog.setView(layoutPersonalFolderDialog);
+
+				final GridView listviewPersonalFolder = (GridView) layoutPersonalFolderDialog.findViewById(R.id.listview_personal_folder);
+				DialogFolderAdapter folderAdapter = new DialogFolderAdapter(mContext, getFolder());
+				listviewPersonalFolder.setAdapter(folderAdapter);
+
 				EditText textFolderName = (EditText) layoutPersonalFolderDialog.findViewById(R.id.text_folder_name);
 				TextView lableChannelTitle = (TextView) v.getRootView().findViewById(R.id.label_page_title);
 				textFolderName.setText(lableChannelTitle.getText());
+
 				personalFolderDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -52,8 +60,12 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 					public void onClick(DialogInterface dialog, int which) {
 						DBHelper dbHelper = DBHelper.getInstance(mContext);
 						AsyncSession asyncSession = dbHelper.getAsyncSession();
-						EditText textFolderName = (EditText) ((Dialog) dialog).findViewById(R.id.text_folder_name);
-						String folderName = textFolderName.getText().toString();
+						GridView listviewPersonalFolder = (GridView) ((Dialog) dialog).findViewById(R.id.listview_personal_folder);
+						String folderName = ((DialogFolderAdapter) listviewPersonalFolder.getAdapter()).getSelectedFolder();
+						if (folderName.isEmpty()) {
+							EditText textFolderName = (EditText) ((Dialog) dialog).findViewById(R.id.text_folder_name);
+							folderName = textFolderName.getText().toString();
+						}
 						List<PersonalFolder> listFolder = getFolderFromDB(folderName);
 						if (listFolder.size() == 0) {
 							asyncSession.insert(new PersonalFolder(null, folderName, personalList.get(position).getPicURL()))
@@ -90,5 +102,11 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 		QueryBuilder<PersonalFolder> queryBuilder = DBHelper.getInstance(mContext).getPersonalFolderDao().queryBuilder();
 		queryBuilder.where(PersonalFolderDao.Properties.FolderName.eq(folderName));
 		return queryBuilder.list().get(0).getId().intValue();
+	}
+
+	private List<PersonalFolder> getFolder() {
+		DBHelper dbHelper = DBHelper.getInstance(mContext);
+		PersonalFolderDao personalFolderDao = dbHelper.getPersonalFolderDao();
+		return personalFolderDao.loadAll();
 	}
 }
