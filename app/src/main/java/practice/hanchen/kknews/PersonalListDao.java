@@ -14,7 +14,7 @@ import practice.hanchen.kknews.PersonalList;
 /** 
  * DAO for table "PERSONAL_LIST".
 */
-public class PersonalListDao extends AbstractDao<PersonalList, Void> {
+public class PersonalListDao extends AbstractDao<PersonalList, Long> {
 
     public static final String TABLENAME = "PERSONAL_LIST";
 
@@ -23,10 +23,11 @@ public class PersonalListDao extends AbstractDao<PersonalList, Void> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property FolderId = new Property(0, Integer.class, "folderId", false, "FOLDER_ID");
-        public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
-        public final static Property PicURL = new Property(2, String.class, "picURL", false, "PIC_URL");
-        public final static Property Description = new Property(3, String.class, "description", false, "DESCRIPTION");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property FolderId = new Property(1, Integer.class, "folderId", false, "FOLDER_ID");
+        public final static Property Title = new Property(2, String.class, "title", false, "TITLE");
+        public final static Property PicURL = new Property(3, String.class, "picURL", false, "PIC_URL");
+        public final static Property Description = new Property(4, String.class, "description", false, "DESCRIPTION");
     };
 
 
@@ -42,10 +43,11 @@ public class PersonalListDao extends AbstractDao<PersonalList, Void> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PERSONAL_LIST\" (" + //
-                "\"FOLDER_ID\" INTEGER," + // 0: folderId
-                "\"TITLE\" TEXT NOT NULL ," + // 1: title
-                "\"PIC_URL\" TEXT NOT NULL ," + // 2: picURL
-                "\"DESCRIPTION\" TEXT NOT NULL );"); // 3: description
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+                "\"FOLDER_ID\" INTEGER," + // 1: folderId
+                "\"TITLE\" TEXT NOT NULL ," + // 2: title
+                "\"PIC_URL\" TEXT NOT NULL ," + // 3: picURL
+                "\"DESCRIPTION\" TEXT NOT NULL );"); // 4: description
     }
 
     /** Drops the underlying database table. */
@@ -59,29 +61,35 @@ public class PersonalListDao extends AbstractDao<PersonalList, Void> {
     protected void bindValues(SQLiteStatement stmt, PersonalList entity) {
         stmt.clearBindings();
  
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
+ 
         Integer folderId = entity.getFolderId();
         if (folderId != null) {
-            stmt.bindLong(1, folderId);
+            stmt.bindLong(2, folderId);
         }
-        stmt.bindString(2, entity.getTitle());
-        stmt.bindString(3, entity.getPicURL());
-        stmt.bindString(4, entity.getDescription());
+        stmt.bindString(3, entity.getTitle());
+        stmt.bindString(4, entity.getPicURL());
+        stmt.bindString(5, entity.getDescription());
     }
 
     /** @inheritdoc */
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     /** @inheritdoc */
     @Override
     public PersonalList readEntity(Cursor cursor, int offset) {
         PersonalList entity = new PersonalList( //
-            cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0), // folderId
-            cursor.getString(offset + 1), // title
-            cursor.getString(offset + 2), // picURL
-            cursor.getString(offset + 3) // description
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // folderId
+            cursor.getString(offset + 2), // title
+            cursor.getString(offset + 3), // picURL
+            cursor.getString(offset + 4) // description
         );
         return entity;
     }
@@ -89,23 +97,28 @@ public class PersonalListDao extends AbstractDao<PersonalList, Void> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, PersonalList entity, int offset) {
-        entity.setFolderId(cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0));
-        entity.setTitle(cursor.getString(offset + 1));
-        entity.setPicURL(cursor.getString(offset + 2));
-        entity.setDescription(cursor.getString(offset + 3));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setFolderId(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
+        entity.setTitle(cursor.getString(offset + 2));
+        entity.setPicURL(cursor.getString(offset + 3));
+        entity.setDescription(cursor.getString(offset + 4));
      }
     
     /** @inheritdoc */
     @Override
-    protected Void updateKeyAfterInsert(PersonalList entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected Long updateKeyAfterInsert(PersonalList entity, long rowId) {
+        entity.setId(rowId);
+        return rowId;
     }
     
     /** @inheritdoc */
     @Override
-    public Void getKey(PersonalList entity) {
-        return null;
+    public Long getKey(PersonalList entity) {
+        if(entity != null) {
+            return entity.getId();
+        } else {
+            return null;
+        }
     }
 
     /** @inheritdoc */

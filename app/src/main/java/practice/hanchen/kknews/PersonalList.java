@@ -6,6 +6,7 @@ package practice.hanchen.kknews;
  */
 public class PersonalList {
 
+    private Long id;
     private Integer folderId;
     /** Not-null value. */
     private String title;
@@ -17,11 +18,24 @@ public class PersonalList {
     public PersonalList() {
     }
 
-    public PersonalList(Integer folderId, String title, String picURL, String description) {
+    public PersonalList(Long id) {
+        this.id = id;
+    }
+
+    public PersonalList(Long id, Integer folderId, String title, String picURL, String description) {
+        this.id = id;
         this.folderId = folderId;
         this.title = title;
         this.picURL = picURL;
         this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getFolderId() {

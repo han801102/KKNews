@@ -68,7 +68,7 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 									.waitForCompletion();
 						}
 
-						asyncSession.insert(new PersonalList(getFolderIdFromDB(folderName), personalList.get(position).getTitle(),
+						asyncSession.insert(new PersonalList(null, getFolderIdFromDB(folderName), personalList.get(position).getTitle(),
 								personalList.get(position).getPicURL(), personalList.get(position).getDescription()));
 					}
 				});

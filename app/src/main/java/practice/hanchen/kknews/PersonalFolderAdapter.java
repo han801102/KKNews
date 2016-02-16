@@ -73,7 +73,7 @@ public class PersonalFolderAdapter extends FolderAdapter {
 							coverURL = personalFolders.get(position).getDefaultPicUrl();
 						}
 
-						if (!folderName.equals(textFolderName.getText().toString())){
+						if (!folderName.equals(textFolderName.getText().toString())) {
 							asyncSession.update(new PersonalFolder(folderId.longValue(), textFolderName.getText().toString(), coverURL));
 							personalFolders.get(position).setFolderName(textFolderName.getText().toString());
 						}
@@ -88,12 +88,27 @@ public class PersonalFolderAdapter extends FolderAdapter {
 		convertView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(mContext, PersonalArticleActivity.class);
-				Bundle bundle = new Bundle();
-				bundle.putInt("id", personalFolders.get(position).getId().intValue());
-				bundle.putString("title", personalFolders.get(position).getFolderName());
-				intent.putExtras(bundle);
-				mContext.startActivity(intent);
+				if (selectedMode) {
+					if (isSelected.get(position)) {
+						isSelected.set(position, false);
+						numTotalSelected--;
+					} else {
+						isSelected.set(position, true);
+						numTotalSelected++;
+					}
+					for (int i = 0; i < isSelected.size(); i++) {
+						Log.d("han", i + ": " + isSelected.get(i).toString());
+					}
+					Log.d("han", "total = " + numTotalSelected);
+					notifyDataSetChanged();
+				} else {
+					Intent intent = new Intent(mContext, PersonalArticleActivity.class);
+					Bundle bundle = new Bundle();
+					bundle.putInt("id", personalFolders.get(position).getId().intValue());
+					bundle.putString("title", personalFolders.get(position).getFolderName());
+					intent.putExtras(bundle);
+					mContext.startActivity(intent);
+				}
 			}
 		});
 		return convertView;
@@ -109,5 +124,23 @@ public class PersonalFolderAdapter extends FolderAdapter {
 		QueryBuilder<PersonalFolder> queryBuilder = DBHelper.getInstance(mContext).getPersonalFolderDao().queryBuilder();
 		queryBuilder.where(PersonalFolderDao.Properties.FolderName.eq(folderName));
 		return queryBuilder.list().get(0).getId().intValue();
+	}
+
+	public void deleteFolder() {
+		DBHelper dbHelper = DBHelper.getInstance(mContext);
+		AsyncSession asyncSession = dbHelper.getAsyncSession();
+		for(int i = 0; i < isSelected.size(); i++) {
+			if(isSelected.get(i)) {
+				List<PersonalList> personalLists = getPersonalList(personalFolders.get(i).getId().intValue());
+				for(int j = 0; j < personalLists.size(); j++) {
+					//dbHelper.getPersonalListDao().delete(personalLists.get(j));
+					asyncSession.delete(personalLists.get(j));
+				}
+				asyncSession.delete(personalFolders.get(i)).waitForCompletion();
+				personalFolders.remove(i);
+				isSelected.remove(i);
+			}
+		}
+		resetSelection();
 	}
 }

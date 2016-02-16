@@ -18,6 +18,7 @@ public class KKNewsDaoGenerator {
 		personalFolder.addStringProperty("defaultPicUrl").notNull();
 
 		Entity personalList = schema.addEntity("PersonalList");
+		personalList.addIdProperty().primaryKey().autoincrement();
 		personalList.addIntProperty("folderId");
 		personalList.addStringProperty("title").notNull();
 		personalList.addStringProperty("picURL").notNull();

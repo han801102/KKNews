@@ -70,7 +70,7 @@ public class ChannelArticleActivity extends ArticleActivity {
 					} else if (eventType == XmlPullParser.END_TAG) {
 						if (xpp.getName().equals("item")) {
 							isInsideItem = false;
-							personalList.add(new PersonalList(0, title, description[0], description[1]));
+							personalList.add(new PersonalList(null, 0, title, description[0], description[1]));
 						}
 					}
 

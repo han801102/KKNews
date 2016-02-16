@@ -9,11 +9,12 @@
 			android:layout_height="wrap_content"
 			android:text="@string/personal_fragment_name"
 			android:textSize="40sp"/>
-
 	<GridView
 			android:id="@+id/listview_folder"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:numColumns="4"
 			android:stretchMode="columnWidth"/>
+
+
 </LinearLayout>

@@ -75,6 +75,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 		holder.getLableAlbumDescription().setMovementMethod(LinkMovementMethod.getInstance());
 		Picasso.with(mContext)
 				.load(personalList.get(position).getPicURL())
+				.placeholder(R.drawable.loading)
 				.resize(400, 400)
 				.into(holder.getViewAlbum());
 	}

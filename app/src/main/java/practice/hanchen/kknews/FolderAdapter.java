@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.security.acl.LastOwnerException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +24,9 @@ public class FolderAdapter extends BaseAdapter {
 	protected List<PersonalFolder> personalFolders = null;
 	private LayoutInflater mInflater;
 	protected Context mContext;
+	protected boolean selectedMode;
+	protected ArrayList<Boolean> isSelected;
+	protected int numTotalSelected;
 
 	public static class ViewHolder {
 		public ImageView imageView;
@@ -33,6 +37,12 @@ public class FolderAdapter extends BaseAdapter {
 		this.mInflater = LayoutInflater.from(context);
 		this.personalFolders = personalFolders;
 		this.mContext = context;
+		this.selectedMode = false;
+		isSelected = new ArrayList<Boolean>();
+		for(int i = 0; i < personalFolders.size(); i++) {
+			this.isSelected.add(false);
+		}
+		this.numTotalSelected = 0;
 	}
 
 	@Override
@@ -63,7 +73,11 @@ public class FolderAdapter extends BaseAdapter {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 		viewHolder.textView.setText(personalFolders.get(position).getFolderName());
-		viewHolder.textView.setTextColor(Color.BLACK);
+		if (isSelected.get(position)) {
+			viewHolder.textView.setTextColor(Color.BLUE);
+		} else {
+			viewHolder.textView.setTextColor(Color.BLACK);
+		}
 		viewHolder.textView.setGravity(Gravity.CENTER_HORIZONTAL);
 		Picasso.with(convertView.getContext())
 				.load(personalFolders.get(position).getDefaultPicUrl())
@@ -73,4 +87,22 @@ public class FolderAdapter extends BaseAdapter {
 		return convertView;
 	}
 
+	public void changeSelectedMode() {
+		selectedMode = !selectedMode;
+	}
+
+	public boolean getSelectedMode() {
+		return selectedMode;
+	}
+	public int getTotalSelected() {
+		return numTotalSelected;
+	}
+
+	public void resetSelection() {
+		for(int i = 0;i < isSelected.size(); i++) {
+			isSelected.set(i, false);
+		}
+		numTotalSelected = 0;
+		selectedMode = false;
+	}
 }
