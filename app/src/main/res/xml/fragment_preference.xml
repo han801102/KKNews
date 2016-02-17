@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory
+			android:key="behavior"
+			android:summary="行為"
+			android:title="行為">
+		<CheckBoxPreference
+				android:key="auto_update"
+				android:summary="開啟時自動更新資訊"
+				android:title="自動更新"/>
+		<ListPreference
+				android:key="update_freq"
+				android:summary="設定每次自動更新間隔時間"
+				android:title="自動更新頻率"
+				android:entries="@array/frequencies"
+				android:entryValues="@array/frequencies_value"
+				android:defaultValue="30"/>
+	</PreferenceCategory>
+</PreferenceScreen>
