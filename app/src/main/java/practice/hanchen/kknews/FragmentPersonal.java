@@ -26,9 +26,10 @@ public class FragmentPersonal extends Fragment {
 	private GridView gridView;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		DBHelper dbHelper = DBHelper.getInstance(getContext());
 		View view = inflater.inflate(R.layout.fragment_personal, container, false);
 		gridView = (GridView) view.findViewById(R.id.listview_folder);
-		PersonalFolderAdapter personalFolderAdapter = new PersonalFolderAdapter(getContext(), getFolder());
+		PersonalFolderAdapter personalFolderAdapter = new PersonalFolderAdapter(getContext(), dbHelper.getPersonalFolderAll());
 		gridView.setAdapter(personalFolderAdapter);
 		setHasOptionsMenu(true);
 		return view;
@@ -53,7 +54,6 @@ public class FragmentPersonal extends Fragment {
 			case R.id.action_delete:
 				((PersonalFolderAdapter)gridView.getAdapter()).changeSelectedMode();
 				getActivity().invalidateOptionsMenu();
-				Log.d("han", "checkedItem = " + ((PersonalFolderAdapter) gridView.getAdapter()).getTotalSelected());
 				return true;
 			case R.id.action_accept:
 				((PersonalFolderAdapter)gridView.getAdapter()).deleteFolder();
@@ -63,16 +63,10 @@ public class FragmentPersonal extends Fragment {
 			case R.id.action_cancel:
 				((PersonalFolderAdapter)gridView.getAdapter()).resetSelection();
 				((PersonalFolderAdapter)gridView.getAdapter()).notifyDataSetChanged();
-				getActivity().invalidateOptionsMenu();;
+				getActivity().invalidateOptionsMenu();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
-	}
-
-	private List<PersonalFolder> getFolder() {
-		DBHelper dbHelper = DBHelper.getInstance(getContext());
-		PersonalFolderDao personalFolderDao = dbHelper.getPersonalFolderDao();
-		return personalFolderDao.loadAll();
 	}
 }

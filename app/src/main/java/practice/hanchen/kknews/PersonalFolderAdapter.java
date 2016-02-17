@@ -16,9 +16,6 @@ import android.widget.EditText;
 
 import java.util.List;
 
-import de.greenrobot.dao.async.AsyncSession;
-import de.greenrobot.dao.query.QueryBuilder;
-
 /**
  * Created by HanChen on 2016/2/5.
  */
@@ -35,22 +32,22 @@ public class PersonalFolderAdapter extends FolderAdapter {
 			@Override
 			public boolean onLongClick(View v) {
 				LayoutInflater layoutInflater = LayoutInflater.from(v.getContext());
-				final View layoutPersonalFolderDialog = layoutInflater.inflate(R.layout.layout_personal_folder_dialog, null);
+				View layoutPersonalFolderDialog = layoutInflater.inflate(R.layout.layout_personal_folder_dialog, null);
 
-				AlertDialog.Builder personalFolderDialog = new AlertDialog.Builder(v.getContext());
+				final AlertDialog.Builder personalFolderDialog = new AlertDialog.Builder(v.getContext());
 				personalFolderDialog.setTitle("編輯資料夾");
 				personalFolderDialog.setView(layoutPersonalFolderDialog);
 
+				DBHelper dbHelper = DBHelper.getInstance(v.getContext());
 				RecyclerView listviewPersonalFolder = (RecyclerView) layoutPersonalFolderDialog.findViewById(R.id.listview_folder_cover);
-				GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 2);
+				GridLayoutManager gridLayoutManager = new GridLayoutManager(v.getContext(), 2);
 				listviewPersonalFolder.setLayoutManager(gridLayoutManager);
-				final String folderName = personalFolders.get(position).getFolderName();
-				final List<PersonalList> personalLists = getPersonalList(getFolderIdFromDB(folderName));
+				List<PersonalList> personalLists = dbHelper.getPersonalListByFolderName(personalFolders.get(position).getFolderName());
 				FolderPictureAdapter folderPictureAdapter = new FolderPictureAdapter(mContext, personalLists);
 				listviewPersonalFolder.setAdapter(folderPictureAdapter);
 
 				final EditText textFolderName = (EditText) layoutPersonalFolderDialog.findViewById(R.id.text_folder_name);
-				textFolderName.setText(folderName);
+				textFolderName.setText(personalFolders.get(position).getFolderName());
 
 				personalFolderDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
 					@Override
@@ -63,19 +60,15 @@ public class PersonalFolderAdapter extends FolderAdapter {
 						RecyclerView listviewPersonalFolder = (RecyclerView) ((Dialog) dialog).findViewById(R.id.listview_folder_cover);
 						String coverURL = ((FolderPictureAdapter) listviewPersonalFolder.getAdapter()).getCoverURL();
 						DBHelper dbHelper = DBHelper.getInstance(mContext);
-						AsyncSession asyncSession = dbHelper.getAsyncSession();
-						Integer folderId = getFolderIdFromDB(folderName);
 
 						if (!coverURL.isEmpty()) {
-							asyncSession.update(new PersonalFolder(folderId.longValue(), folderName, coverURL));
 							personalFolders.get(position).setDefaultPicUrl(coverURL);
-						} else {
-							coverURL = personalFolders.get(position).getDefaultPicUrl();
+							dbHelper.updatePersonalFolder(personalFolders.get(position));
 						}
 
-						if (!folderName.equals(textFolderName.getText().toString())) {
-							asyncSession.update(new PersonalFolder(folderId.longValue(), textFolderName.getText().toString(), coverURL));
+						if (!personalFolders.get(position).getFolderName().equals(textFolderName.getText().toString())) {
 							personalFolders.get(position).setFolderName(textFolderName.getText().toString());
+							dbHelper.updatePersonalFolder(personalFolders.get(position));
 						}
 						notifyDataSetChanged();
 					}
@@ -91,15 +84,11 @@ public class PersonalFolderAdapter extends FolderAdapter {
 				if (selectedMode) {
 					if (isSelected.get(position)) {
 						isSelected.set(position, false);
-						numTotalSelected--;
+						Log.d("han", position + " = " + isSelected.get(position));
 					} else {
 						isSelected.set(position, true);
-						numTotalSelected++;
+						Log.d("han", position + " = " + isSelected.get(position));
 					}
-					for (int i = 0; i < isSelected.size(); i++) {
-						Log.d("han", i + ": " + isSelected.get(i).toString());
-					}
-					Log.d("han", "total = " + numTotalSelected);
 					notifyDataSetChanged();
 				} else {
 					Intent intent = new Intent(mContext, PersonalArticleActivity.class);
@@ -114,31 +103,19 @@ public class PersonalFolderAdapter extends FolderAdapter {
 		return convertView;
 	}
 
-	private List<PersonalList> getPersonalList(int id) {
-		QueryBuilder<PersonalList> queryBuilder = DBHelper.getInstance(mContext).getPersonalListDao().queryBuilder();
-		queryBuilder.where(PersonalListDao.Properties.FolderId.eq(id));
-		return queryBuilder.list();
-	}
-
-	private int getFolderIdFromDB(String folderName) {
-		QueryBuilder<PersonalFolder> queryBuilder = DBHelper.getInstance(mContext).getPersonalFolderDao().queryBuilder();
-		queryBuilder.where(PersonalFolderDao.Properties.FolderName.eq(folderName));
-		return queryBuilder.list().get(0).getId().intValue();
-	}
-
 	public void deleteFolder() {
 		DBHelper dbHelper = DBHelper.getInstance(mContext);
-		AsyncSession asyncSession = dbHelper.getAsyncSession();
-		for(int i = 0; i < isSelected.size(); i++) {
+		Log.d("han", "isSelected = " + isSelected.size());
+		int i = 0;
+		while( i < isSelected.size() ) {
 			if(isSelected.get(i)) {
-				List<PersonalList> personalLists = getPersonalList(personalFolders.get(i).getId().intValue());
-				for(int j = 0; j < personalLists.size(); j++) {
-					//dbHelper.getPersonalListDao().delete(personalLists.get(j));
-					asyncSession.delete(personalLists.get(j));
-				}
-				asyncSession.delete(personalFolders.get(i)).waitForCompletion();
+				List<PersonalList> personalLists = dbHelper.getPersonalListByFolderId(personalFolders.get(i).getId().intValue());
+				dbHelper.deletePersonalList(personalLists);
+				dbHelper.deletePersonalFolder(personalFolders.get(i));
 				personalFolders.remove(i);
 				isSelected.remove(i);
+			} else {
+				i++;
 			}
 		}
 		resetSelection();

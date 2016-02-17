@@ -26,7 +26,6 @@ public class FolderAdapter extends BaseAdapter {
 	protected Context mContext;
 	protected boolean selectedMode;
 	protected ArrayList<Boolean> isSelected;
-	protected int numTotalSelected;
 
 	public static class ViewHolder {
 		public ImageView imageView;
@@ -42,7 +41,6 @@ public class FolderAdapter extends BaseAdapter {
 		for(int i = 0; i < personalFolders.size(); i++) {
 			this.isSelected.add(false);
 		}
-		this.numTotalSelected = 0;
 	}
 
 	@Override
@@ -94,15 +92,12 @@ public class FolderAdapter extends BaseAdapter {
 	public boolean getSelectedMode() {
 		return selectedMode;
 	}
-	public int getTotalSelected() {
-		return numTotalSelected;
-	}
 
 	public void resetSelection() {
-		for(int i = 0;i < isSelected.size(); i++) {
-			isSelected.set(i, false);
+		isSelected = new ArrayList<Boolean>();
+		for(int i = 0;i < personalFolders.size(); i++) {
+			isSelected.add(i, false);
 		}
-		numTotalSelected = 0;
 		selectedMode = false;
 	}
 }

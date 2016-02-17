@@ -66,7 +66,6 @@ public class FolderPictureAdapter extends RecyclerView.Adapter<FolderPictureAdap
 					setSelected(v, selectedPosition, false);
 					selectedPosition = position;
 				}
-				Log.e("han", "onClick: " + getCoverURL());
 			}
 		});
 		Picasso.with(mContext)
