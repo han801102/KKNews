@@ -96,7 +96,7 @@ public class FolderAdapter extends BaseAdapter {
 	public void resetSelection() {
 		isSelected = new ArrayList<Boolean>();
 		for(int i = 0;i < personalFolders.size(); i++) {
-			isSelected.add(i, false);
+			isSelected.add(false);
 		}
 		selectedMode = false;
 	}

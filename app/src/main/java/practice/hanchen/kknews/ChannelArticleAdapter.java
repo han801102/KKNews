@@ -3,27 +3,42 @@ package practice.hanchen.kknews;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by HanChen on 2016/2/5.
  */
 public class ChannelArticleAdapter extends ArticleAdapter {
+	private boolean selectedMode;
+	private ArrayList<Boolean> selectedItem;
 
 	public ChannelArticleAdapter(Context context, List<PersonalList> personalList) {
 		super(context, personalList);
+		this.selectedMode = false;
+		selectedItem = new ArrayList<Boolean>();
+		for (int i = 0; i < personalList.size(); i++) {
+			selectedItem.add(false);
+		}
 	}
 
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, final int position) {
 		super.onBindViewHolder(holder, position);
+		if(selectedItem.get(position)) {
+			holder.getView().setBackgroundColor(Color.BLUE);
+		} else {
+			holder.getView().setBackgroundColor(Color.WHITE);
+		}
 		holder.getView().setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
@@ -74,12 +89,69 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 		holder.getView().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (holder.getLableAlbumDescription().getVisibility() == View.GONE) {
-					holder.getLableAlbumDescription().setVisibility(View.VISIBLE);
+				if (selectedMode) {
+					if (selectedItem.get(position)) {
+						selectedItem.set(position, false);
+					} else {
+						selectedItem.set(position, true);
+					}
+					notifyDataSetChanged();
 				} else {
-					holder.getLableAlbumDescription().setVisibility(View.GONE);
+					if (holder.getLableAlbumDescription().getVisibility() == View.GONE) {
+						holder.getLableAlbumDescription().setVisibility(View.VISIBLE);
+					} else {
+						holder.getLableAlbumDescription().setVisibility(View.GONE);
+					}
 				}
 			}
 		});
+	}
+
+	public void resetSelection() {
+		selectedItem = new ArrayList<Boolean>();
+		for (int i = 0; i < personalList.size(); i++) {
+			selectedItem.add(false);
+		}
+		selectedMode = false;
+	}
+
+	public void changeSelectedMode() {
+		selectedMode = !selectedMode;
+	}
+
+	public boolean getSelectedMode() {
+		return selectedMode;
+	}
+
+	public String getFirstSelectedItemPicURL() {
+		for(int i = 0; i < selectedItem.size(); i++) {
+			if(selectedItem.get(i)) {
+				return personalList.get(i).getPicURL();
+			}
+		}
+		return Integer.toString(R.drawable.loading);
+	}
+
+	public void insertSelectedItem(int folderId) {
+		DBHelper dbHelper = DBHelper.getInstance(mContext);
+		for(int i = 0; i < selectedItem.size(); i++) {
+			if(selectedItem.get(i)) {
+				PersonalList tempPersonalList = personalList.get(i);
+				tempPersonalList.setId(null);
+				tempPersonalList.setFolderId(folderId);
+				dbHelper.insertPersonalList(tempPersonalList);
+			}
+		}
+		resetSelection();
+		notifyDataSetChanged();
+	}
+
+	public boolean hasSelectedItem() {
+		for(int i = 0; i < selectedItem.size(); i++) {
+			if(selectedItem.get(i)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
