@@ -24,11 +24,7 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 
 	public ChannelArticleAdapter(Context context, List<Article> articles) {
 		super(context, articles);
-		this.selectedMode = false;
-		selectedItem = new ArrayList<>();
-		for (int i = 0; i < articles.size(); i++) {
-			selectedItem.add(false);
-		}
+		setArticleData(articles);
 	}
 
 	@Override
@@ -153,5 +149,19 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 			}
 		}
 		return false;
+	}
+
+	public void resetArticleData(List<Article> newArticles) {
+		setArticleData(newArticles);
+		notifyDataSetChanged();
+	}
+
+	public void setArticleData(List<Article> newArticles) {
+		this.selectedMode = false;
+		articleList = newArticles;
+		selectedItem = new ArrayList<>();
+		for (int i = 0; i < articleList.size(); i++) {
+			selectedItem.add(false);
+		}
 	}
 }

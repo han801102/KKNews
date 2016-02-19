@@ -1,13 +1,18 @@
 package practice.hanchen.kknews;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,17 +26,29 @@ import java.util.List;
 
 public class ChannelArticleActivity extends ArticleActivity {
 	private RecyclerView listViewChannelData;
+	private long id;
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(broadcastReceiver);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle extras = getIntent().getExtras();
-		Long id = extras.getLong("id");
+		id = extras.getLong("id");
 
 		listViewChannelData = (RecyclerView) findViewById(R.id.listview_article_data);
 		LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
 		listViewChannelData.setLayoutManager(mLayoutManager);
 		ChannelArticleAdapter channelArticleAdapter = new ChannelArticleAdapter(getApplicationContext(), getArticleByChannelId(id));
 		listViewChannelData.setAdapter(channelArticleAdapter);
+
+		IntentFilter intentFilter = new IntentFilter("UPDATE_DATA");
+		registerReceiver(broadcastReceiver, intentFilter);
+
 	}
 
 	@Override
@@ -72,6 +89,17 @@ public class ChannelArticleActivity extends ArticleActivity {
 				return super.onOptionsItemSelected(item);
 		}
 	}
+
+	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			switch (intent.getAction()) {
+				case "UPDATE_DATA":
+					((ChannelArticleAdapter)listViewChannelData.getAdapter()).resetArticleData(getArticleByChannelId(id));
+					break;
+			}
+		}
+	};
 
 	private List<Article> getArticleByChannelId(Long id) {
 		DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
@@ -122,6 +150,5 @@ public class ChannelArticleActivity extends ArticleActivity {
 			}
 		});
 		personalFolderDialog.show();
-
 	}
 }

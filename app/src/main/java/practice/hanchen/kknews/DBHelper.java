@@ -34,7 +34,7 @@ public class DBHelper {
 	}
 
 	public void insertArticle(Article article) {
-		asyncSession.insert(article);
+		asyncSession.insert(article).waitForCompletion();
 	}
 
 	public void updateArticle(Article article) {

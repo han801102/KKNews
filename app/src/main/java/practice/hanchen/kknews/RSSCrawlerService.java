@@ -108,6 +108,9 @@ public class RSSCrawlerService extends Service {
 
 			if (articleChanged) {
 				articles = articleFromDB;
+				Intent intent = new Intent("UPDATE_DATA");
+				intent.putExtra("update", true);
+				sendBroadcast(intent);
 			}
 		}
 
