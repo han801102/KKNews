@@ -1,16 +1,18 @@
 package practice.hanchen.kknews;
 
 import android.content.Context;
+import android.graphics.LightingColorFilter;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by HanChen on 2016/2/5.
  */
 public class PersonalArticleAdapter extends ArticleAdapter {
-	public PersonalArticleAdapter(Context context, List<PersonalList> personalList) {
-		super(context, personalList);
+	public PersonalArticleAdapter(Context context, List<Article> articles) {
+		super(context, articles);
 	}
 
 	@Override

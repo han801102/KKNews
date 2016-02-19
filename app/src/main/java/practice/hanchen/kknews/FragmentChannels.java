@@ -10,40 +10,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import java.util.List;
 
 /**
  * Created by HanChen on 2016/2/2.
  */
 public class FragmentChannels extends Fragment {
-	ArrayList<ChannelInfo> channelInfoArrayList = null;
+	DBHelper dbHelper;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (channelInfoArrayList == null) {
-			channelInfoArrayList = new ArrayList<ChannelInfo>();
-			try {
-				AssetManager assetManager = getActivity().getAssets();
-				InputStream inputStream;
-				inputStream = assetManager.open("channels_list.xml");
-				parseChannelInfoFromXML(inputStream);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		dbHelper = DBHelper.getInstance(getContext());
 	}
 
 	@Override
@@ -53,38 +41,46 @@ public class FragmentChannels extends Fragment {
 		LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
 		recyclerView.setLayoutManager(mLayoutManager);
 
-		ChannelsAdapter channelsAdapter = new ChannelsAdapter(getActivity(), channelInfoArrayList);
+		ChannelsAdapter channelsAdapter = new ChannelsAdapter(getActivity(), loadChannelsFormDB());
 		recyclerView.setAdapter(channelsAdapter);
 		return view;
 	}
 
-	private void parseChannelInfoFromXML(InputStream inputStream) {
-		String url = "";
-		String title = "";
-		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = null;
-			builder = factory.newDocumentBuilder();
-			Document document = builder.parse(inputStream);
-			Element root = document.getDocumentElement();
-			NodeList nodes = root.getElementsByTagName("channel");
-			for (int i = 0; i < nodes.getLength(); i++) {
-				Element channelElement = (Element) nodes.item(i);
-				NodeList channelNodeList = channelElement.getChildNodes();
-				for (int j = 0; j < channelNodeList.getLength(); j++) {
-					Node channelNode = channelNodeList.item(j);
-					String nodeName = channelNode.getNodeName();
-					if (nodeName.equals("title")) {
-						title = channelNode.getFirstChild().getNodeValue();
-					} else if (nodeName.equals("url")) {
-						url = channelNode.getFirstChild().getNodeValue();
-					}
+	private List<Channel> loadChannelsFormDB() {
+		if (isChannelsInDB()) {
+			return dbHelper.getChannels();
+		} else {
+			AssetManager assetManager = getActivity().getAssets();
+			InputStream inputStream;
+			try {
+				inputStream = assetManager.open("channels_list.xml");
+				BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
+				StringBuilder total = new StringBuilder();
+				String line;
+				while ((line = r.readLine()) != null) {
+					total.append(line);
 				}
-				channelInfoArrayList.add(new ChannelInfo(title, url));
+				return parseChannelInfoFromXML(total.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			e.printStackTrace();
 		}
+		return new ArrayList<>();
+	}
 
+	private List<Channel> parseChannelInfoFromXML(String XMLContents) {
+		Document xmlDoc = Jsoup.parse(XMLContents);
+		Elements channel = xmlDoc.select("channel");
+		List<Channel> channels = new ArrayList<>();
+		for (Element item : channel) {
+			Channel tempChannel = new Channel(null, item.select("title").get(0).text(), item.select("url").get(0).text());
+			dbHelper.insertChannel(tempChannel);
+			channels.add(tempChannel);
+		}
+		return channels;
+	}
+
+	private boolean isChannelsInDB() {
+		return dbHelper.getChannelsCount() > 0;
 	}
 }

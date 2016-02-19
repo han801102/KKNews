@@ -21,26 +21,26 @@ import de.greenrobot.dao.query.QueryBuilder;
  * Created by HanChen on 2016/2/5.
  */
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder> {
-	protected List<PersonalList> personalList;
+	protected List<Article> articleList;
 	protected Context mContext;
 	private static final String LOG_TAG = "ChannelDataAdapter";
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
-		private final TextView lableAlbumName;
+		private final TextView labelAlbumName;
 		private final ImageView viewAlbum;
-		private final TextView lableAlbumDescription;
+		private final TextView labelAlbumDescription;
 		private View view;
 
 		public ViewHolder(View v) {
 			super(v);
 			view = v;
-			lableAlbumName = (TextView) v.findViewById(R.id.label_album_name);
+			labelAlbumName = (TextView) v.findViewById(R.id.label_album_name);
 			viewAlbum = (ImageView) v.findViewById(R.id.view_album);
-			lableAlbumDescription = (TextView) v.findViewById(R.id.label_album_description);
+			labelAlbumDescription = (TextView) v.findViewById(R.id.label_album_description);
 		}
 
 		public TextView getLableAlbumName() {
-			return lableAlbumName;
+			return labelAlbumName;
 		}
 
 		public ImageView getViewAlbum() {
@@ -48,7 +48,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 		}
 
 		public TextView getLableAlbumDescription() {
-			return lableAlbumDescription;
+			return labelAlbumDescription;
 		}
 
 		public View getView() {
@@ -56,8 +56,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 		}
 	}
 
-	public ArticleAdapter(Context context, List<PersonalList> personalList) {
-		this.personalList = personalList;
+	public ArticleAdapter(Context context, List<Article> articleList) {
+		this.articleList = articleList;
 		this.mContext = context;
 	}
 
@@ -70,11 +70,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int position) {
-		holder.getLableAlbumName().setText(personalList.get(position).getTitle());
-		holder.getLableAlbumDescription().setText(Html.fromHtml(personalList.get(position).getDescription()));
+		holder.getLableAlbumName().setText(articleList.get(position).getTitle());
+		holder.getLableAlbumDescription().setText(Html.fromHtml(articleList.get(position).getDescription()));
 		holder.getLableAlbumDescription().setMovementMethod(LinkMovementMethod.getInstance());
 		Picasso.with(mContext)
-				.load(personalList.get(position).getPicURL())
+				.load(articleList.get(position).getPicURL())
 				.placeholder(R.drawable.loading)
 				.resize(400, 400)
 				.into(holder.getViewAlbum());
@@ -82,6 +82,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
 	@Override
 	public int getItemCount() {
-		return personalList.size();
+		return articleList.size();
 	}
 }

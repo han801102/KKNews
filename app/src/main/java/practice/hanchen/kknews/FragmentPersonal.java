@@ -24,6 +24,7 @@ import java.util.List;
  */
 public class FragmentPersonal extends Fragment {
 	private GridView gridView;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		DBHelper dbHelper = DBHelper.getInstance(getContext());
@@ -39,7 +40,7 @@ public class FragmentPersonal extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_personal, menu);
 		super.onCreateOptionsMenu(menu, inflater);
-		if ( ((PersonalFolderAdapter)gridView.getAdapter()).getSelectedMode() ) {
+		if (((PersonalFolderAdapter) gridView.getAdapter()).getSelectedMode()) {
 			menu.findItem(R.id.action_accept).setVisible(true);
 			menu.findItem(R.id.action_cancel).setVisible(true);
 		} else {
@@ -52,17 +53,17 @@ public class FragmentPersonal extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.action_delete:
-				((PersonalFolderAdapter)gridView.getAdapter()).changeSelectedMode();
+				((PersonalFolderAdapter) gridView.getAdapter()).changeSelectedMode();
 				getActivity().invalidateOptionsMenu();
 				return true;
 			case R.id.action_accept:
-				((PersonalFolderAdapter)gridView.getAdapter()).deleteFolder();
-				((PersonalFolderAdapter)gridView.getAdapter()).notifyDataSetChanged();
+				((PersonalFolderAdapter) gridView.getAdapter()).deleteFolder();
+				((PersonalFolderAdapter) gridView.getAdapter()).notifyDataSetChanged();
 				getActivity().invalidateOptionsMenu();
 				return true;
 			case R.id.action_cancel:
-				((PersonalFolderAdapter)gridView.getAdapter()).resetSelection();
-				((PersonalFolderAdapter)gridView.getAdapter()).notifyDataSetChanged();
+				((PersonalFolderAdapter) gridView.getAdapter()).resetSelection();
+				((PersonalFolderAdapter) gridView.getAdapter()).notifyDataSetChanged();
 				getActivity().invalidateOptionsMenu();
 				return true;
 			default:

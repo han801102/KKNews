@@ -1,9 +1,13 @@
 package practice.hanchen.kknews;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersonalArticleActivity extends ArticleActivity {
 	@Override
@@ -11,12 +15,14 @@ public class PersonalArticleActivity extends ArticleActivity {
 		super.onCreate(savedInstanceState);
 		Bundle extras = getIntent().getExtras();
 		int id = extras.getInt("id");
-		RecyclerView listviewChannelData = (RecyclerView) findViewById(R.id.listview_article_data);
+		RecyclerView listViewChannelData = (RecyclerView) findViewById(R.id.listview_article_data);
 		LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-		listviewChannelData.setLayoutManager(mLayoutManager);
+		listViewChannelData.setLayoutManager(mLayoutManager);
 
 		DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
-		PersonalArticleAdapter personalArticleAdapter = new PersonalArticleAdapter(getApplicationContext(), dbHelper.getPersonalListByFolderId(id));
-		listviewChannelData.setAdapter(personalArticleAdapter);
+		PersonalArticleAdapter personalArticleAdapter =
+				new PersonalArticleAdapter(getApplicationContext(), dbHelper.getPersonalArticle(dbHelper.getPersonalListByFolderId(id)));
+		listViewChannelData.setAdapter(personalArticleAdapter);
 	}
+
 }

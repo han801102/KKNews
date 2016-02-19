@@ -17,7 +17,7 @@ import java.util.List;
  * Created by HanChen on 2016/2/15.
  */
 public class FolderPictureAdapter extends RecyclerView.Adapter<FolderPictureAdapter.ViewHolder> {
-	private List<PersonalList> personalLists;
+	private List<Article> articles;
 	private Context mContext;
 	private int selectedPosition;
 
@@ -31,14 +31,15 @@ public class FolderPictureAdapter extends RecyclerView.Adapter<FolderPictureAdap
 			view = v;
 		}
 
-		public ImageView getViewFolderCover(){
+		public ImageView getViewFolderCover() {
 			return viewFolderCover;
 		}
+
 		public View getView() {return view;}
 	}
 
-	public FolderPictureAdapter(Context context, List<PersonalList> personalLists) {
-		this.personalLists = personalLists;
+	public FolderPictureAdapter(Context context, List<Article> articles) {
+		this.articles = articles;
 		this.mContext = context;
 		this.selectedPosition = -1;
 	}
@@ -69,14 +70,14 @@ public class FolderPictureAdapter extends RecyclerView.Adapter<FolderPictureAdap
 			}
 		});
 		Picasso.with(mContext)
-				.load(personalLists.get(position).getPicURL())
+				.load(articles.get(position).getPicURL())
 				.resize(300, 300)
 				.into(holder.getViewFolderCover());
 	}
 
 	@Override
 	public int getItemCount() {
-		return personalLists.size();
+		return articles.size();
 	}
 
 	private void setSelected(View v, int position, boolean isSelect) {
@@ -94,7 +95,7 @@ public class FolderPictureAdapter extends RecyclerView.Adapter<FolderPictureAdap
 		if (selectedPosition == -1) {
 			return "";
 		} else {
-			return personalLists.get(selectedPosition).getPicURL();
+			return articles.get(selectedPosition).getPicURL();
 		}
 	}
 }

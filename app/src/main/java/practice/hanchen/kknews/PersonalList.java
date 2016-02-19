@@ -7,13 +7,8 @@ package practice.hanchen.kknews;
 public class PersonalList {
 
     private Long id;
-    private Integer folderId;
-    /** Not-null value. */
-    private String title;
-    /** Not-null value. */
-    private String picURL;
-    /** Not-null value. */
-    private String description;
+    private long folderId;
+    private long articleId;
 
     public PersonalList() {
     }
@@ -22,12 +17,10 @@ public class PersonalList {
         this.id = id;
     }
 
-    public PersonalList(Long id, Integer folderId, String title, String picURL, String description) {
+    public PersonalList(Long id, long folderId, long articleId) {
         this.id = id;
         this.folderId = folderId;
-        this.title = title;
-        this.picURL = picURL;
-        this.description = description;
+        this.articleId = articleId;
     }
 
     public Long getId() {
@@ -38,42 +31,20 @@ public class PersonalList {
         this.id = id;
     }
 
-    public Integer getFolderId() {
+    public long getFolderId() {
         return folderId;
     }
 
-    public void setFolderId(Integer folderId) {
+    public void setFolderId(long folderId) {
         this.folderId = folderId;
     }
 
-    /** Not-null value. */
-    public String getTitle() {
-        return title;
+    public long getArticleId() {
+        return articleId;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    /** Not-null value. */
-    public String getPicURL() {
-        return picURL;
-    }
-
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setPicURL(String picURL) {
-        this.picURL = picURL;
-    }
-
-    /** Not-null value. */
-    public String getDescription() {
-        return description;
-    }
-
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setArticleId(long articleId) {
+        this.articleId = articleId;
     }
 
 }

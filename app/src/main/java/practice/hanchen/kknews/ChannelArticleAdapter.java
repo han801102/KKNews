@@ -22,11 +22,11 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 	private boolean selectedMode;
 	private ArrayList<Boolean> selectedItem;
 
-	public ChannelArticleAdapter(Context context, List<PersonalList> personalList) {
-		super(context, personalList);
+	public ChannelArticleAdapter(Context context, List<Article> articles) {
+		super(context, articles);
 		this.selectedMode = false;
-		selectedItem = new ArrayList<Boolean>();
-		for (int i = 0; i < personalList.size(); i++) {
+		selectedItem = new ArrayList<>();
+		for (int i = 0; i < articles.size(); i++) {
 			selectedItem.add(false);
 		}
 	}
@@ -34,7 +34,7 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, final int position) {
 		super.onBindViewHolder(holder, position);
-		if(selectedItem.get(position)) {
+		if (selectedItem.get(position)) {
 			holder.getView().setBackgroundColor(Color.BLUE);
 		} else {
 			holder.getView().setBackgroundColor(Color.WHITE);
@@ -50,13 +50,13 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 				personalFolderDialog.setTitle("加入個人精選");
 				personalFolderDialog.setView(layoutPersonalFolderDialog);
 
-				GridView listviewPersonalFolder = (GridView) layoutPersonalFolderDialog.findViewById(R.id.listview_personal_folder);
+				GridView listViewPersonalFolder = (GridView) layoutPersonalFolderDialog.findViewById(R.id.listview_personal_folder);
 				DialogFolderAdapter folderAdapter = new DialogFolderAdapter(v.getContext(), dbHelper.getPersonalFolderAll());
-				listviewPersonalFolder.setAdapter(folderAdapter);
+				listViewPersonalFolder.setAdapter(folderAdapter);
 
 				EditText textFolderName = (EditText) layoutPersonalFolderDialog.findViewById(R.id.text_folder_name);
-				TextView lableChannelTitle = (TextView) v.getRootView().findViewById(R.id.label_page_title);
-				textFolderName.setText(lableChannelTitle.getText());
+				TextView labelChannelTitle = (TextView) v.getRootView().findViewById(R.id.label_page_title);
+				textFolderName.setText(labelChannelTitle.getText());
 
 				personalFolderDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
 					@Override
@@ -67,19 +67,18 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						DBHelper dbHelper = DBHelper.getInstance(mContext);
-						GridView listviewPersonalFolder = (GridView) ((Dialog) dialog).findViewById(R.id.listview_personal_folder);
-						String folderName = ((DialogFolderAdapter) listviewPersonalFolder.getAdapter()).getSelectedFolder();
+						GridView listViewPersonalFolder = (GridView) ((Dialog) dialog).findViewById(R.id.listview_personal_folder);
+						String folderName = ((DialogFolderAdapter) listViewPersonalFolder.getAdapter()).getSelectedFolder();
 						if (folderName.isEmpty()) {
 							EditText textFolderName = (EditText) ((Dialog) dialog).findViewById(R.id.text_folder_name);
 							folderName = textFolderName.getText().toString();
 						}
 
 						if (!dbHelper.isFolderInDB(folderName)) {
-							dbHelper.insertPersonalFolder(new PersonalFolder(null, folderName, personalList.get(position).getPicURL()));
+							dbHelper.insertPersonalFolder(new PersonalFolder(null, folderName, articleList.get(position).getPicURL()));
 						}
-						int folderId = dbHelper.getFolderByName(folderName).getId().intValue();
-						dbHelper.insertPersonalList(new PersonalList(null, folderId, personalList.get(position).getTitle(),
-								personalList.get(position).getPicURL(), personalList.get(position).getDescription()));
+						Long folderId = dbHelper.getFolderByName(folderName).getId();
+						dbHelper.insertPersonalList(new PersonalList(null, folderId, articleList.get(position).getId()));
 					}
 				});
 				personalFolderDialog.show();
@@ -108,8 +107,8 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 	}
 
 	public void resetSelection() {
-		selectedItem = new ArrayList<Boolean>();
-		for (int i = 0; i < personalList.size(); i++) {
+		selectedItem = new ArrayList<>();
+		for (int i = 0; i < articleList.size(); i++) {
 			selectedItem.add(false);
 		}
 		selectedMode = false;
@@ -124,9 +123,9 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 	}
 
 	public String getFirstSelectedItemPicURL() {
-		for(int i = 0; i < selectedItem.size(); i++) {
-			if(selectedItem.get(i)) {
-				return personalList.get(i).getPicURL();
+		for (int i = 0; i < selectedItem.size(); i++) {
+			if (selectedItem.get(i)) {
+				return articleList.get(i).getPicURL();
 			}
 		}
 		return Integer.toString(R.drawable.loading);
@@ -134,11 +133,12 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 
 	public void insertSelectedItem(int folderId) {
 		DBHelper dbHelper = DBHelper.getInstance(mContext);
-		for(int i = 0; i < selectedItem.size(); i++) {
-			if(selectedItem.get(i)) {
-				PersonalList tempPersonalList = personalList.get(i);
+		for (int i = 0; i < selectedItem.size(); i++) {
+			if (selectedItem.get(i)) {
+				PersonalList tempPersonalList = new PersonalList();
 				tempPersonalList.setId(null);
 				tempPersonalList.setFolderId(folderId);
+				tempPersonalList.setArticleId(articleList.get(i).getId());
 				dbHelper.insertPersonalList(tempPersonalList);
 			}
 		}
@@ -147,8 +147,8 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 	}
 
 	public boolean hasSelectedItem() {
-		for(int i = 0; i < selectedItem.size(); i++) {
-			if(selectedItem.get(i)) {
+		for (int i = 0; i < selectedItem.size(); i++) {
+			if (selectedItem.get(i)) {
 				return true;
 			}
 		}

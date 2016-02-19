@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +36,8 @@ public class FolderAdapter extends BaseAdapter {
 		this.personalFolders = personalFolders;
 		this.mContext = context;
 		this.selectedMode = false;
-		isSelected = new ArrayList<Boolean>();
-		for(int i = 0; i < personalFolders.size(); i++) {
+		isSelected = new ArrayList<>();
+		for (int i = 0; i < personalFolders.size(); i++) {
 			this.isSelected.add(false);
 		}
 	}
@@ -94,8 +93,8 @@ public class FolderAdapter extends BaseAdapter {
 	}
 
 	public void resetSelection() {
-		isSelected = new ArrayList<Boolean>();
-		for(int i = 0;i < personalFolders.size(); i++) {
+		isSelected = new ArrayList<>();
+		for (int i = 0; i < personalFolders.size(); i++) {
 			isSelected.add(false);
 		}
 		selectedMode = false;

@@ -4,21 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by HanChen on 2016/2/2.
  */
-//public class ChannelsAdapter extends BaseAdapter {
 public class ChannelsAdapter extends RecyclerView.Adapter<ChannelsAdapter.ViewHolder> {
-	private ArrayList<ChannelInfo> channelInfoArrayList;
+	private List<Channel> channelList;
 	private Context mContext;
-	private LayoutInflater mInflater;
 	private static final String LOG_TAG = "ChannelsAdapter";
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -34,8 +34,8 @@ public class ChannelsAdapter extends RecyclerView.Adapter<ChannelsAdapter.ViewHo
 		}
 	}
 
-	public ChannelsAdapter(Context context, ArrayList<ChannelInfo> channelList) {
-		this.channelInfoArrayList = channelList;
+	public ChannelsAdapter(Context context, List<Channel> channels) {
+		this.channelList = channels;
 		this.mContext = context;
 	}
 
@@ -48,14 +48,14 @@ public class ChannelsAdapter extends RecyclerView.Adapter<ChannelsAdapter.ViewHo
 
 	@Override
 	public void onBindViewHolder(ViewHolder holder, final int position) {
-		holder.getTextView().setText(channelInfoArrayList.get(position).getTitle());
+		holder.getTextView().setText(channelList.get(position).getTitle());
 		holder.getTextView().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(mContext, ChannelArticleActivity.class);
 				Bundle bundle = new Bundle();
-				bundle.putString("url", getURL(position));
-				bundle.putString("title", channelInfoArrayList.get(position).getTitle());
+				bundle.putLong("id", getId(position));
+				bundle.putString("title", channelList.get(position).getTitle());
 				intent.putExtras(bundle);
 				mContext.startActivity(intent);
 			}
@@ -64,10 +64,10 @@ public class ChannelsAdapter extends RecyclerView.Adapter<ChannelsAdapter.ViewHo
 
 	@Override
 	public int getItemCount() {
-		return channelInfoArrayList.size();
+		return channelList.size();
 	}
 
-	public String getURL(int position) {
-		return channelInfoArrayList.get(position).getUrl();
+	public Long getId(int position) {
+		return channelList.get(position).getId();
 	}
 }

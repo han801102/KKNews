@@ -19,9 +19,19 @@ public class KKNewsDaoGenerator {
 
 		Entity personalList = schema.addEntity("PersonalList");
 		personalList.addIdProperty().primaryKey().autoincrement();
-		personalList.addIntProperty("folderId");
-		personalList.addStringProperty("title").notNull();
-		personalList.addStringProperty("picURL").notNull();
-		personalList.addStringProperty("description").notNull();
+		personalList.addLongProperty("folderId").notNull();
+		personalList.addLongProperty("articleId").notNull();
+
+		Entity channels = schema.addEntity("Channel");
+		channels.addIdProperty().primaryKey().autoincrement();
+		channels.addStringProperty("title").notNull();
+		channels.addStringProperty("URL").notNull();
+
+		Entity article = schema.addEntity("Article");
+		article.addIdProperty().primaryKey().autoincrement();
+		article.addLongProperty("channelId").notNull();
+		article.addStringProperty("title").notNull();
+		article.addStringProperty("picURL").notNull();
+		article.addStringProperty("description").notNull();
 	}
 }

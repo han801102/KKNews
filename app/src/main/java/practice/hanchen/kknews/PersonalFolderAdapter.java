@@ -39,12 +39,12 @@ public class PersonalFolderAdapter extends FolderAdapter {
 				personalFolderDialog.setView(layoutPersonalFolderDialog);
 
 				DBHelper dbHelper = DBHelper.getInstance(v.getContext());
-				RecyclerView listviewPersonalFolder = (RecyclerView) layoutPersonalFolderDialog.findViewById(R.id.listview_folder_cover);
+				RecyclerView listViewPersonalFolder = (RecyclerView) layoutPersonalFolderDialog.findViewById(R.id.listview_folder_cover);
 				GridLayoutManager gridLayoutManager = new GridLayoutManager(v.getContext(), 2);
-				listviewPersonalFolder.setLayoutManager(gridLayoutManager);
+				listViewPersonalFolder.setLayoutManager(gridLayoutManager);
 				List<PersonalList> personalLists = dbHelper.getPersonalListByFolderName(personalFolders.get(position).getFolderName());
-				FolderPictureAdapter folderPictureAdapter = new FolderPictureAdapter(mContext, personalLists);
-				listviewPersonalFolder.setAdapter(folderPictureAdapter);
+				FolderPictureAdapter folderPictureAdapter = new FolderPictureAdapter(mContext, dbHelper.getPersonalArticle(personalLists));
+				listViewPersonalFolder.setAdapter(folderPictureAdapter);
 
 				final EditText textFolderName = (EditText) layoutPersonalFolderDialog.findViewById(R.id.text_folder_name);
 				textFolderName.setText(personalFolders.get(position).getFolderName());
@@ -57,8 +57,8 @@ public class PersonalFolderAdapter extends FolderAdapter {
 				personalFolderDialog.setPositiveButton("修改", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						RecyclerView listviewPersonalFolder = (RecyclerView) ((Dialog) dialog).findViewById(R.id.listview_folder_cover);
-						String coverURL = ((FolderPictureAdapter) listviewPersonalFolder.getAdapter()).getCoverURL();
+						RecyclerView listViewPersonalFolder = (RecyclerView) ((Dialog) dialog).findViewById(R.id.listview_folder_cover);
+						String coverURL = ((FolderPictureAdapter) listViewPersonalFolder.getAdapter()).getCoverURL();
 						DBHelper dbHelper = DBHelper.getInstance(mContext);
 
 						if (!coverURL.isEmpty()) {
@@ -84,10 +84,8 @@ public class PersonalFolderAdapter extends FolderAdapter {
 				if (selectedMode) {
 					if (isSelected.get(position)) {
 						isSelected.set(position, false);
-						Log.d("han", position + " = " + isSelected.get(position));
 					} else {
 						isSelected.set(position, true);
-						Log.d("han", position + " = " + isSelected.get(position));
 					}
 					notifyDataSetChanged();
 				} else {
@@ -105,10 +103,9 @@ public class PersonalFolderAdapter extends FolderAdapter {
 
 	public void deleteFolder() {
 		DBHelper dbHelper = DBHelper.getInstance(mContext);
-		Log.d("han", "isSelected = " + isSelected.size());
 		int i = 0;
-		while( i < isSelected.size() ) {
-			if(isSelected.get(i)) {
+		while (i < isSelected.size()) {
+			if (isSelected.get(i)) {
 				List<PersonalList> personalLists = dbHelper.getPersonalListByFolderId(personalFolders.get(i).getId().intValue());
 				dbHelper.deletePersonalList(personalLists);
 				dbHelper.deletePersonalFolder(personalFolders.get(i));

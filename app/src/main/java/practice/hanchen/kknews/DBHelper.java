@@ -2,6 +2,7 @@ package practice.hanchen.kknews;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.dao.async.AsyncSession;
@@ -32,16 +33,40 @@ public class DBHelper {
 		asyncSession = daoSession.startAsyncSession();
 	}
 
-	public PersonalFolderDao getPersonalFolderDao() {
-		return daoSession.getPersonalFolderDao();
+	public void insertArticle(Article article) {
+		asyncSession.insert(article);
 	}
 
-	public PersonalListDao getPersonalListDao() {
-		return daoSession.getPersonalListDao();
+	public void updateArticle(Article article) {
+		asyncSession.update(article);
 	}
 
-	public AsyncSession getAsyncSession() {
-		return asyncSession;
+	public void deleteArticle(Article article) {
+		asyncSession.delete(article);
+	}
+
+	public List<Article> getArticleAll() {
+		return daoSession.getArticleDao().loadAll();
+	}
+
+	public List<Article> getArticleByChannelId(Long id) {
+		QueryBuilder<Article> queryBuilder = daoSession.getArticleDao().queryBuilder();
+		queryBuilder.where(ArticleDao.Properties.ChannelId.eq(id));
+		return queryBuilder.list();
+	}
+
+	public Article getArticleById(Long id) {
+		QueryBuilder<Article> queryBuilder = daoSession.getArticleDao().queryBuilder();
+		queryBuilder.where(ArticleDao.Properties.Id.eq(id));
+		return queryBuilder.unique();
+	}
+
+	public List<Article> getPersonalArticle(List<PersonalList> personalList) {
+		List<Article> articles = new ArrayList<>();
+		for (PersonalList item : personalList) {
+			articles.add(getArticleById(item.getArticleId()));
+		}
+		return articles;
 	}
 
 	public List<PersonalFolder> getPersonalFolderAll() {
@@ -52,6 +77,18 @@ public class DBHelper {
 		QueryBuilder<PersonalFolder> queryBuilder = daoSession.getPersonalFolderDao().queryBuilder();
 		queryBuilder.where(PersonalFolderDao.Properties.FolderName.eq(folderName));
 		return queryBuilder.unique();
+	}
+
+	public int getChannelsCount() {
+		return daoSession.getChannelDao().loadAll().size();
+	}
+
+	public List<Channel> getChannels() {
+		return daoSession.getChannelDao().loadAll();
+	}
+
+	public void insertChannel(Channel channel) {
+		asyncSession.insert(channel).waitForCompletion();
 	}
 
 	public boolean isFolderInDB(String folderName) {
@@ -74,14 +111,14 @@ public class DBHelper {
 	}
 
 	public void insertPersonalList(PersonalList personalList) {
-		if(!isPersonalListInDB(personalList)) {
+		if (!isPersonalListInDB(personalList)) {
 			asyncSession.insert(personalList).waitForCompletion();
 		}
 	}
 
 	public boolean isPersonalListInDB(PersonalList personalList) {
 		QueryBuilder<PersonalList> queryBuilder = daoSession.getPersonalListDao().queryBuilder();
-		int personalListCount = queryBuilder.where(PersonalListDao.Properties.Title.eq(personalList.getTitle()))
+		int personalListCount = queryBuilder.where(PersonalListDao.Properties.ArticleId.eq(personalList.getArticleId()))
 				.where(PersonalListDao.Properties.FolderId.eq(personalList.getFolderId())).list().size();
 		return (personalListCount > 0);
 	}
@@ -91,7 +128,7 @@ public class DBHelper {
 	}
 
 	public void deletePersonalList(List<PersonalList> personalLists) {
-		for(int i = 0; i < personalLists.size(); i++) {
+		for (int i = 0; i < personalLists.size(); i++) {
 			asyncSession.delete(personalLists.get(i));
 		}
 	}
