@@ -1,11 +1,10 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.fragment;
 
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import practice.hanchen.kknews.utils.DBHelper;
+import practice.hanchen.kknews.R;
+import practice.hanchen.kknews.adapter.ChannelsAdapter;
+import practice.hanchen.kknews.dao.Channel;
 
 /**
  * Created by HanChen on 2016/2/2.

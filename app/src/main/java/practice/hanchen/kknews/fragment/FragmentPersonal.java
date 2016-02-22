@@ -1,4 +1,4 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +10,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import practice.hanchen.kknews.utils.DBHelper;
+import practice.hanchen.kknews.adapter.PersonalFolderAdapter;
+import practice.hanchen.kknews.R;
 
 /**
  * Created by HanChen on 2016/2/2.

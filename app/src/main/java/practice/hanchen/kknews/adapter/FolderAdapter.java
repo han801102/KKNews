@@ -1,47 +1,57 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import practice.hanchen.kknews.R;
+import practice.hanchen.kknews.dao.PersonalFolder;
+
 /**
- * Created by HanChen on 2016/2/15.
+ * Created by HanChen on 2016/2/19.
  */
-public class FolderPictureAdapter extends RecyclerView.Adapter<FolderPictureAdapter.ViewHolder> {
-	private List<Article> articles;
-	private Context mContext;
-	private int selectedPosition;
+public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder> {
+	protected List<PersonalFolder> personalFolderList = null;
+	protected Context mContext;
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		private ImageView viewFolderCover;
+		private TextView labelFolderName;
 		private View view;
+
+		public View getView() {
+			return view;
+		}
 
 		public ViewHolder(View v) {
 			super(v);
 			viewFolderCover = (ImageView) v.findViewById(R.id.view_folder_cover);
+			labelFolderName = (TextView) v.findViewById(R.id.label_folder_name);
 			view = v;
+		}
+
+		public TextView getLabelFolderName() {
+			return labelFolderName;
 		}
 
 		public ImageView getViewFolderCover() {
 			return viewFolderCover;
 		}
-
-		public View getView() {return view;}
 	}
 
-	public FolderPictureAdapter(Context context, List<Article> articles) {
-		this.articles = articles;
+	public FolderAdapter(Context context, List<PersonalFolder> personalFolders) {
 		this.mContext = context;
-		this.selectedPosition = -1;
+		this.personalFolderList = personalFolders;
 	}
 
 	@Override
@@ -53,36 +63,17 @@ public class FolderPictureAdapter extends RecyclerView.Adapter<FolderPictureAdap
 
 	@Override
 	public void onBindViewHolder(ViewHolder holder, final int position) {
-		holder.getView().setSelected(selectedPosition == position);
-		holder.getView().setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (selectedPosition == -1) {
-					selectedPosition = position;
-				} else if (selectedPosition == position) {
-					selectedPosition = -1;
-				} else {
-					selectedPosition = position;
-				}
-				notifyDataSetChanged();
-			}
-		});
 		Picasso.with(mContext)
-				.load(articles.get(position).getPicURL())
+				.load(personalFolderList.get(position).getDefaultPicUrl())
 				.resize(300, 300)
 				.into(holder.getViewFolderCover());
+		holder.getLabelFolderName().setText(personalFolderList.get(position).getFolderName());
+		holder.getLabelFolderName().setGravity(Gravity.CENTER_HORIZONTAL);
+		holder.getLabelFolderName().setTextColor(Color.BLACK);
 	}
 
 	@Override
 	public int getItemCount() {
-		return articles.size();
-	}
-
-	public String getCoverURL() {
-		if (selectedPosition == -1) {
-			return "";
-		} else {
-			return articles.get(selectedPosition).getPicURL();
-		}
+		return personalFolderList.size();
 	}
 }

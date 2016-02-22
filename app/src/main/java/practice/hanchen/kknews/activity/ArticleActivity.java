@@ -1,8 +1,10 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import practice.hanchen.kknews.R;
 
 public class ArticleActivity extends AppCompatActivity {
 

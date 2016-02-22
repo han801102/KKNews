@@ -6,7 +6,7 @@ import de.greenrobot.daogenerator.Schema;
 
 public class KKNewsDaoGenerator {
 	public static void main(String[] args) throws Exception {
-		Schema schema = new Schema(1, "practice.hanchen.kknews");
+		Schema schema = new Schema(1, "practice.hanchen.kknews.dao");
 		addEntity(schema);
 		new DaoGenerator().generateAll(schema, "../KKNews/app/src/main/java");
 	}

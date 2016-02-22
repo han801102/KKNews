@@ -1,9 +1,11 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.adapter;
 
 import android.content.Context;
 import android.view.View;
 
 import java.util.List;
+
+import practice.hanchen.kknews.dao.PersonalFolder;
 
 /**
  * Created by HanChen on 2016/2/22.

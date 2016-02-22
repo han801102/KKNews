@@ -1,4 +1,4 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +11,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
+
+import practice.hanchen.kknews.utils.DBHelper;
+import practice.hanchen.kknews.R;
+import practice.hanchen.kknews.adapter.DialogFolderAdapter;
+import practice.hanchen.kknews.adapter.FolderPictureAdapter;
+import practice.hanchen.kknews.dao.PersonalList;
 
 /**
  * Created by HanChen on 2016/2/22.

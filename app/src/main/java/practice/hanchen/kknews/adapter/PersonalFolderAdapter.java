@@ -1,4 +1,4 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,6 +10,13 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import practice.hanchen.kknews.utils.DBHelper;
+import practice.hanchen.kknews.dialog.FolderAlertDialog;
+import practice.hanchen.kknews.activity.PersonalArticleActivity;
+import practice.hanchen.kknews.R;
+import practice.hanchen.kknews.dao.PersonalFolder;
+import practice.hanchen.kknews.dao.PersonalList;
 
 /**
  * Created by HanChen on 2016/2/19.

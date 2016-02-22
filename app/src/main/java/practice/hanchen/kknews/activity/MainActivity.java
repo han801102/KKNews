@@ -1,4 +1,4 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.activity;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -12,10 +12,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.Calendar;
+
+import practice.hanchen.kknews.utils.DBHelper;
+import practice.hanchen.kknews.R;
+import practice.hanchen.kknews.fragment.FragmentChannels;
+import practice.hanchen.kknews.fragment.FragmentPersonal;
+import practice.hanchen.kknews.fragment.FragmentSetting;
 
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,7 +57,7 @@ public class MainActivity extends AppCompatActivity
 		if (autoUpdate) {
 			startCrawlRSS(Integer.parseInt(updateFreq));
 		} else {
-			Intent intent = new Intent(this, RSSCrawlerService.class);
+			Intent intent = new Intent(this, DBHelper.RSSCrawlerService.class);
 			startService(intent);
 		}
 	}
@@ -104,7 +109,7 @@ public class MainActivity extends AppCompatActivity
 
 	public void startCrawlRSS(int time) {
 		Calendar cal = Calendar.getInstance();
-		Intent intent = new Intent(this, RSSCrawlerService.class);
+		Intent intent = new Intent(this, DBHelper.RSSCrawlerService.class);
 		PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), time * 1000, pendingIntent);
