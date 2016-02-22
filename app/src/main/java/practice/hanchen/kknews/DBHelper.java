@@ -99,14 +99,14 @@ public class DBHelper {
 		asyncSession.insert(personalFolder).waitForCompletion();
 	}
 
-	public List<PersonalList> getPersonalListByFolderId(int id) {
+	public List<PersonalList> getPersonalListByFolderId(Long id) {
 		QueryBuilder<PersonalList> queryBuilder = daoSession.getPersonalListDao().queryBuilder();
 		queryBuilder.where(PersonalListDao.Properties.FolderId.eq(id));
 		return queryBuilder.list();
 	}
 
 	public List<PersonalList> getPersonalListByFolderName(String folderName) {
-		int folderId = getFolderByName(folderName).getId().intValue();
+		Long folderId = getFolderByName(folderName).getId();
 		return getPersonalListByFolderId(folderId);
 	}
 

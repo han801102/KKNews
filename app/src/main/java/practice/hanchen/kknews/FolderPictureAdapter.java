@@ -78,17 +78,6 @@ public class FolderPictureAdapter extends RecyclerView.Adapter<FolderPictureAdap
 		return articles.size();
 	}
 
-	private void setSelected(View v, int position, boolean isSelect) {
-		RecyclerView recyclerView = (RecyclerView) v.getParent();
-		ViewHolder viewHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
-
-		if (isSelect) {
-			viewHolder.getViewFolderCover().setBackgroundColor(Color.BLUE);
-		} else {
-			viewHolder.getViewFolderCover().setBackgroundColor(Color.WHITE);
-		}
-	}
-
 	public String getCoverURL() {
 		if (selectedPosition == -1) {
 			return "";

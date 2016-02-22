@@ -3,10 +3,6 @@ package practice.hanchen.kknews;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,35 +29,16 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 		holder.getView().setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				DBHelper dbHelper = DBHelper.getInstance(v.getContext());
-				LayoutInflater layoutInflater = LayoutInflater.from(v.getContext());
-				final View layoutPersonalFolderDialog = layoutInflater.inflate(R.layout.layout_personal_folder_dialog, null);
-
-				AlertDialog.Builder personalFolderDialog = new AlertDialog.Builder(v.getContext());
-				personalFolderDialog.setTitle("加入個人精選");
-				personalFolderDialog.setView(layoutPersonalFolderDialog);
-
-				final RecyclerView listViewPersonalFolder = (RecyclerView) layoutPersonalFolderDialog.findViewById(R.id
-						.listview_folder_cover);
-				GridLayoutManager gridLayoutManager = new GridLayoutManager(v.getContext(), 3);
-				listViewPersonalFolder.setLayoutManager(gridLayoutManager);
-				DialogFolderAdapter recyclerDialogFolderAdapter = new DialogFolderAdapter(mContext, dbHelper.getPersonalFolderAll());
-				listViewPersonalFolder.setAdapter(recyclerDialogFolderAdapter);
-
-				EditText textFolderName = (EditText) layoutPersonalFolderDialog.findViewById(R.id.text_folder_name);
 				TextView labelChannelTitle = (TextView) v.getRootView().findViewById(R.id.label_page_title);
-				textFolderName.setText(labelChannelTitle.getText());
-
-				personalFolderDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				});
-				personalFolderDialog.setPositiveButton("加入", new DialogInterface.OnClickListener() {
+				String folderName = labelChannelTitle.getText().toString();
+				final FolderAlertDialog folderAlertDialog = new FolderAlertDialog(v.getContext(), "加入個人精選", (long)0, folderName);
+				folderAlertDialog.setLabelEditTextTitle("加入個人精選");
+				folderAlertDialog.setLabelGridViewTitle("請選擇要加入的資料夾");
+				folderAlertDialog.setPositiveButton("加入", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						DBHelper dbHelper = DBHelper.getInstance(mContext);
-						String selectedFolderName = ((DialogFolderAdapter) listViewPersonalFolder.getAdapter()).getSelectedFolderName();
+						String selectedFolderName = folderAlertDialog.getSelectedFolderName();
 						if (selectedFolderName.isEmpty()) {
 							EditText textFolderName = (EditText) ((Dialog) dialog).findViewById(R.id.text_folder_name);
 							selectedFolderName = textFolderName.getText().toString();
@@ -74,7 +51,7 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 						dbHelper.insertPersonalList(new PersonalList(null, folderId, articleList.get(position).getId()));
 					}
 				});
-				personalFolderDialog.show();
+				folderAlertDialog.show();
 				return true;
 			}
 		});

@@ -14,7 +14,7 @@ public class PersonalArticleActivity extends ArticleActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle extras = getIntent().getExtras();
-		int id = extras.getInt("id");
+		Long id = extras.getLong("id");
 		RecyclerView listViewChannelData = (RecyclerView) findViewById(R.id.listview_article_data);
 		LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
 		listViewChannelData.setLayoutManager(mLayoutManager);

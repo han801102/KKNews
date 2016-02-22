@@ -127,10 +127,7 @@ public class RSSCrawlerService extends Service {
 			if (article1.getPicURL().equals(article2.getPicURL())) {
 				return false;
 			}
-			if (article1.getDescription().equals(article2.getDescription())) {
-				return false;
-			}
-			return true;
+			return !article1.getDescription().equals(article2.getDescription());
 
 		}
 	}
