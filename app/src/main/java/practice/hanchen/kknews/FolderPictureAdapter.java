@@ -53,20 +53,18 @@ public class FolderPictureAdapter extends RecyclerView.Adapter<FolderPictureAdap
 
 	@Override
 	public void onBindViewHolder(ViewHolder holder, final int position) {
+		holder.getView().setSelected(selectedPosition == position);
 		holder.getView().setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (selectedPosition == -1) {
-					setSelected(v, position, true);
 					selectedPosition = position;
 				} else if (selectedPosition == position) {
-					setSelected(v, position, false);
 					selectedPosition = -1;
 				} else {
-					setSelected(v, position, true);
-					setSelected(v, selectedPosition, false);
 					selectedPosition = position;
 				}
+				notifyDataSetChanged();
 			}
 		});
 		Picasso.with(mContext)

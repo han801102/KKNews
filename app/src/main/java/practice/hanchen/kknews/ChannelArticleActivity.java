@@ -10,16 +10,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -75,7 +74,7 @@ public class ChannelArticleActivity extends ArticleActivity {
 				invalidateOptionsMenu();
 				return true;
 			case R.id.action_accept:
-				if( channelArticleAdapter.hasSelectedItem() ) {
+				if (channelArticleAdapter.hasSelectedItem()) {
 					showDialog();
 				}
 				invalidateOptionsMenu();
@@ -95,7 +94,7 @@ public class ChannelArticleActivity extends ArticleActivity {
 		public void onReceive(Context context, Intent intent) {
 			switch (intent.getAction()) {
 				case "UPDATE_DATA":
-					((ChannelArticleAdapter)listViewChannelData.getAdapter()).resetArticleData(getArticleByChannelId(id));
+					((ChannelArticleAdapter) listViewChannelData.getAdapter()).resetArticleData(getArticleByChannelId(id));
 					break;
 			}
 		}
@@ -115,13 +114,16 @@ public class ChannelArticleActivity extends ArticleActivity {
 		personalFolderDialog.setTitle("加入個人精選");
 		personalFolderDialog.setView(layoutPersonalFolderDialog);
 
-		GridView listViewPersonalFolder = (GridView) layoutPersonalFolderDialog.findViewById(R.id.listview_personal_folder);
-		DialogFolderAdapter folderAdapter = new DialogFolderAdapter(getApplicationContext(), dbHelper.getPersonalFolderAll());
-		listViewPersonalFolder.setAdapter(folderAdapter);
+		RecyclerView listViewFolderCover = (RecyclerView) layoutPersonalFolderDialog.findViewById(R.id.listview_folder_cover);
+		DialogFolderAdapter recyclerPersonalFolderAdapter =
+				new DialogFolderAdapter(getApplicationContext(), dbHelper.getPersonalFolderAll());
+		GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 3);
+		listViewFolderCover.setLayoutManager(gridLayoutManager);
+		listViewFolderCover.setAdapter(recyclerPersonalFolderAdapter);
 
 		EditText textFolderName = (EditText) layoutPersonalFolderDialog.findViewById(R.id.text_folder_name);
 		textFolderName.setTextColor(Color.BLACK);
-		TextView labelChannelTitle = (TextView)findViewById(R.id.label_page_title);
+		TextView labelChannelTitle = (TextView) findViewById(R.id.label_page_title);
 		textFolderName.setText(labelChannelTitle.getText());
 
 		personalFolderDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -133,18 +135,19 @@ public class ChannelArticleActivity extends ArticleActivity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
-				GridView listViewPersonalFolder = (GridView) ((Dialog) dialog).findViewById(R.id.listview_personal_folder);
-				String folderName = ((DialogFolderAdapter) listViewPersonalFolder.getAdapter()).getSelectedFolder();
+				RecyclerView listViewFolderCover = (RecyclerView) ((Dialog) dialog).findViewById(R.id.listview_folder_cover);
+				String folderName = ((DialogFolderAdapter) listViewFolderCover.getAdapter()).getSelectedFolderName();
 				if (folderName.isEmpty()) {
 					EditText textFolderName = (EditText) ((Dialog) dialog).findViewById(R.id.text_folder_name);
 					folderName = textFolderName.getText().toString();
 				}
 
 				if (!dbHelper.isFolderInDB(folderName)) {
-					String firstSelectedItemPicURL = ((ChannelArticleAdapter) listViewChannelData.getAdapter()).getFirstSelectedItemPicURL();
+					String firstSelectedItemPicURL =
+							((ChannelArticleAdapter) listViewChannelData.getAdapter()).getFirstSelectedItemPicURL();
 					dbHelper.insertPersonalFolder(new PersonalFolder(null, folderName, firstSelectedItemPicURL));
 				}
-				int folderId = dbHelper.getFolderByName(folderName).getId().intValue();
+				Long folderId = dbHelper.getFolderByName(folderName).getId();
 				((ChannelArticleAdapter) listViewChannelData.getAdapter()).insertSelectedItem(folderId);
 				invalidateOptionsMenu();
 			}

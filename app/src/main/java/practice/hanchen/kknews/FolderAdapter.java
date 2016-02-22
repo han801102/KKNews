@@ -2,101 +2,75 @@ package practice.hanchen.kknews;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by HanChen on 2016/2/15.
+ * Created by HanChen on 2016/2/19.
  */
-public class FolderAdapter extends BaseAdapter {
-	protected List<PersonalFolder> personalFolders = null;
-	private LayoutInflater mInflater;
+public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder> {
+	protected List<PersonalFolder> personalFolderList = null;
 	protected Context mContext;
-	protected boolean selectedMode;
-	protected ArrayList<Boolean> isSelected;
 
-	public static class ViewHolder {
-		public ImageView imageView;
-		public TextView textView;
+	public static class ViewHolder extends RecyclerView.ViewHolder {
+		private ImageView viewFolderCover;
+		private TextView labelFolderName;
+		private View view;
+
+		public View getView() {
+			return view;
+		}
+
+		public ViewHolder(View v) {
+			super(v);
+			viewFolderCover = (ImageView) v.findViewById(R.id.view_folder_cover);
+			labelFolderName = (TextView) v.findViewById(R.id.label_folder_name);
+			view = v;
+		}
+
+		public TextView getLabelFolderName() {
+			return labelFolderName;
+		}
+
+		public ImageView getViewFolderCover() {
+			return viewFolderCover;
+		}
 	}
 
 	public FolderAdapter(Context context, List<PersonalFolder> personalFolders) {
-		this.mInflater = LayoutInflater.from(context);
-		this.personalFolders = personalFolders;
 		this.mContext = context;
-		this.selectedMode = false;
-		isSelected = new ArrayList<>();
-		for (int i = 0; i < personalFolders.size(); i++) {
-			this.isSelected.add(false);
-		}
+		this.personalFolderList = personalFolders;
 	}
 
 	@Override
-	public int getCount() {
-		return personalFolders.size();
+	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		View v = LayoutInflater.from(parent.getContext())
+				.inflate(R.layout.listview_item_personal_folder, parent, false);
+		return new ViewHolder(v);
 	}
 
 	@Override
-	public Object getItem(int position) {
-		return personalFolders.get(position);
+	public void onBindViewHolder(ViewHolder holder, final int position) {
+		Picasso.with(mContext)
+				.load(personalFolderList.get(position).getDefaultPicUrl())
+				.resize(300, 300)
+				.into(holder.getViewFolderCover());
+		holder.getLabelFolderName().setText(personalFolderList.get(position).getFolderName());
+		holder.getLabelFolderName().setGravity(Gravity.CENTER_HORIZONTAL);
+		holder.getLabelFolderName().setTextColor(Color.BLACK);
 	}
 
 	@Override
-	public long getItemId(int position) {
-		return position;
-	}
-
-	@Override
-	public View getView(final int position, View convertView, ViewGroup parent) {
-		ViewHolder viewHolder;
-		if (convertView == null) {
-			viewHolder = new ViewHolder();
-			convertView = mInflater.inflate(R.layout.listview_item_personal_folder, null);
-			viewHolder.imageView = (ImageView) convertView.findViewById(R.id.view_folder_cover);
-			viewHolder.textView = (TextView) convertView.findViewById(R.id.label_folder_name);
-			convertView.setTag(viewHolder);
-		} else {
-			viewHolder = (ViewHolder) convertView.getTag();
-		}
-		viewHolder.textView.setText(personalFolders.get(position).getFolderName());
-		if (isSelected.get(position)) {
-			viewHolder.textView.setTextColor(Color.BLUE);
-		} else {
-			viewHolder.textView.setTextColor(Color.BLACK);
-		}
-		viewHolder.textView.setGravity(Gravity.CENTER_HORIZONTAL);
-		Picasso.with(convertView.getContext())
-				.load(personalFolders.get(position).getDefaultPicUrl())
-				.resize(350, 350)
-				.centerInside()
-				.into(viewHolder.imageView);
-		return convertView;
-	}
-
-	public void changeSelectedMode() {
-		selectedMode = !selectedMode;
-	}
-
-	public boolean getSelectedMode() {
-		return selectedMode;
-	}
-
-	public void resetSelection() {
-		isSelected = new ArrayList<>();
-		for (int i = 0; i < personalFolders.size(); i++) {
-			isSelected.add(false);
-		}
-		selectedMode = false;
+	public int getItemCount() {
+		return personalFolderList.size();
 	}
 }

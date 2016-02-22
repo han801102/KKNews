@@ -3,13 +3,12 @@ package practice.hanchen.kknews;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -30,11 +29,7 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, final int position) {
 		super.onBindViewHolder(holder, position);
-		if (selectedItem.get(position)) {
-			holder.getView().setBackgroundColor(Color.BLUE);
-		} else {
-			holder.getView().setBackgroundColor(Color.WHITE);
-		}
+		holder.getView().setSelected(selectedItem.get(position));
 		holder.getView().setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
@@ -46,9 +41,12 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 				personalFolderDialog.setTitle("加入個人精選");
 				personalFolderDialog.setView(layoutPersonalFolderDialog);
 
-				GridView listViewPersonalFolder = (GridView) layoutPersonalFolderDialog.findViewById(R.id.listview_personal_folder);
-				DialogFolderAdapter folderAdapter = new DialogFolderAdapter(v.getContext(), dbHelper.getPersonalFolderAll());
-				listViewPersonalFolder.setAdapter(folderAdapter);
+				final RecyclerView listViewPersonalFolder = (RecyclerView) layoutPersonalFolderDialog.findViewById(R.id
+						.listview_folder_cover);
+				GridLayoutManager gridLayoutManager = new GridLayoutManager(v.getContext(), 3);
+				listViewPersonalFolder.setLayoutManager(gridLayoutManager);
+				DialogFolderAdapter recyclerDialogFolderAdapter = new DialogFolderAdapter(mContext, dbHelper.getPersonalFolderAll());
+				listViewPersonalFolder.setAdapter(recyclerDialogFolderAdapter);
 
 				EditText textFolderName = (EditText) layoutPersonalFolderDialog.findViewById(R.id.text_folder_name);
 				TextView labelChannelTitle = (TextView) v.getRootView().findViewById(R.id.label_page_title);
@@ -63,17 +61,16 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						DBHelper dbHelper = DBHelper.getInstance(mContext);
-						GridView listViewPersonalFolder = (GridView) ((Dialog) dialog).findViewById(R.id.listview_personal_folder);
-						String folderName = ((DialogFolderAdapter) listViewPersonalFolder.getAdapter()).getSelectedFolder();
-						if (folderName.isEmpty()) {
+						String selectedFolderName = ((DialogFolderAdapter) listViewPersonalFolder.getAdapter()).getSelectedFolderName();
+						if (selectedFolderName.isEmpty()) {
 							EditText textFolderName = (EditText) ((Dialog) dialog).findViewById(R.id.text_folder_name);
-							folderName = textFolderName.getText().toString();
+							selectedFolderName = textFolderName.getText().toString();
 						}
 
-						if (!dbHelper.isFolderInDB(folderName)) {
-							dbHelper.insertPersonalFolder(new PersonalFolder(null, folderName, articleList.get(position).getPicURL()));
+						if (!dbHelper.isFolderInDB(selectedFolderName)) {
+							dbHelper.insertPersonalFolder(new PersonalFolder(null, selectedFolderName, articleList.get(position).getPicURL()));
 						}
-						Long folderId = dbHelper.getFolderByName(folderName).getId();
+						Long folderId = dbHelper.getFolderByName(selectedFolderName).getId();
 						dbHelper.insertPersonalList(new PersonalList(null, folderId, articleList.get(position).getId()));
 					}
 				});
@@ -127,7 +124,7 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 		return Integer.toString(R.drawable.loading);
 	}
 
-	public void insertSelectedItem(int folderId) {
+	public void insertSelectedItem(Long folderId) {
 		DBHelper dbHelper = DBHelper.getInstance(mContext);
 		for (int i = 0; i < selectedItem.size(); i++) {
 			if (selectedItem.get(i)) {

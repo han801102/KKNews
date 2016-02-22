@@ -24,7 +24,7 @@ public class FragmentSetting extends PreferenceFragment {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				int updateFreq = Integer.parseInt(preference.getSharedPreferences().getString("update_freq", "0"));
-				if (!(boolean)newValue) {
+				if (!(boolean) newValue) {
 					updateFreq = 0;
 				}
 				resetAlarmManagerFreq(updateFreq);
@@ -36,7 +36,7 @@ public class FragmentSetting extends PreferenceFragment {
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				boolean autoUpdate = preference.getSharedPreferences().getBoolean("auto_update", false);
 				if (autoUpdate) {
-					resetAlarmManagerFreq(Integer.parseInt((String)newValue));
+					resetAlarmManagerFreq(Integer.parseInt((String) newValue));
 				}
 				return true;
 			}
@@ -49,7 +49,7 @@ public class FragmentSetting extends PreferenceFragment {
 		PendingIntent pendingIntent = PendingIntent.getService(getActivity(), 0, intent, 0);
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.cancel(pendingIntent);
-		if(time > 0) {
+		if (time > 0) {
 			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), time * 1000, pendingIntent);
 		}
 	}
