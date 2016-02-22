@@ -1,4 +1,4 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.activities;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -12,10 +12,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.Calendar;
+
+import practice.hanchen.kknews.fragments.FragmentChannels;
+import practice.hanchen.kknews.fragments.FragmentPersonal;
+import practice.hanchen.kknews.fragments.FragmentSetting;
+import practice.hanchen.kknews.R;
+import practice.hanchen.kknews.services.RSSCrawlerService;
 
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {

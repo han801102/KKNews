@@ -1,10 +1,9 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.services;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
-import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,6 +14,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import practice.hanchen.kknews.dao.Article;
+import practice.hanchen.kknews.dao.Channel;
+import practice.hanchen.kknews.helpers.DBHelper;
 
 public class RSSCrawlerService extends Service {
 	private List<Channel> channels;

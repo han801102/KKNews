@@ -1,4 +1,4 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.fragments;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.support.v4.preference.PreferenceFragment;
-import android.util.Log;
 
 import java.util.Calendar;
+
+import practice.hanchen.kknews.R;
+import practice.hanchen.kknews.services.RSSCrawlerService;
 
 /**
  * Created by HanChen on 2016/2/2.

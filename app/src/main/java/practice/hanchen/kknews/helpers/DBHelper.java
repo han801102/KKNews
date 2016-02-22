@@ -1,4 +1,4 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.helpers;
 
 import android.content.Context;
 
@@ -7,6 +7,15 @@ import java.util.List;
 
 import de.greenrobot.dao.async.AsyncSession;
 import de.greenrobot.dao.query.QueryBuilder;
+import practice.hanchen.kknews.dao.Article;
+import practice.hanchen.kknews.dao.ArticleDao;
+import practice.hanchen.kknews.dao.Channel;
+import practice.hanchen.kknews.dao.DaoMaster;
+import practice.hanchen.kknews.dao.DaoSession;
+import practice.hanchen.kknews.dao.PersonalFolder;
+import practice.hanchen.kknews.dao.PersonalFolderDao;
+import practice.hanchen.kknews.dao.PersonalList;
+import practice.hanchen.kknews.dao.PersonalListDao;
 
 /**
  * Created by HanChen on 2016/2/4.

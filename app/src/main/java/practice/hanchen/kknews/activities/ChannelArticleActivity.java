@@ -1,4 +1,4 @@
-package practice.hanchen.kknews;
+package practice.hanchen.kknews.activities;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -16,6 +16,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
+
+import practice.hanchen.kknews.adapters.ChannelArticleAdapter;
+import practice.hanchen.kknews.dao.Article;
+import practice.hanchen.kknews.dao.PersonalFolder;
+import practice.hanchen.kknews.helpers.DBHelper;
+import practice.hanchen.kknews.adapters.DialogFolderAdapter;
+import practice.hanchen.kknews.dialogs.FolderAlertDialog;
+import practice.hanchen.kknews.R;
 
 public class ChannelArticleActivity extends ArticleActivity {
 	private RecyclerView listViewChannelData;
