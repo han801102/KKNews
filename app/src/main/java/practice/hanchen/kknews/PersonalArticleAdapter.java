@@ -1,12 +1,11 @@
-package practice.hanchen.kknews.adapter;
+package practice.hanchen.kknews;
 
 import android.content.Context;
+import android.graphics.LightingColorFilter;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import practice.hanchen.kknews.adapter.ArticleAdapter;
-import practice.hanchen.kknews.dao.Article;
 
 /**
  * Created by HanChen on 2016/2/5.

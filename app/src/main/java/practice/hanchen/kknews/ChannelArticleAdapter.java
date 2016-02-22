@@ -1,4 +1,4 @@
-package practice.hanchen.kknews.adapter;
+package practice.hanchen.kknews;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,13 +9,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import practice.hanchen.kknews.utils.DBHelper;
-import practice.hanchen.kknews.dialog.FolderAlertDialog;
-import practice.hanchen.kknews.R;
-import practice.hanchen.kknews.dao.Article;
-import practice.hanchen.kknews.dao.PersonalFolder;
-import practice.hanchen.kknews.dao.PersonalList;
 
 /**
  * Created by HanChen on 2016/2/5.
@@ -137,7 +130,7 @@ public class ChannelArticleAdapter extends ArticleAdapter {
 		notifyDataSetChanged();
 	}
 
-	private void setArticleData(List<Article> newArticles) {
+	public void setArticleData(List<Article> newArticles) {
 		this.selectedMode = false;
 		articleList = newArticles;
 		selectedItem = new ArrayList<>();

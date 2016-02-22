@@ -1,12 +1,13 @@
-package practice.hanchen.kknews.activity;
+package practice.hanchen.kknews;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
-import practice.hanchen.kknews.utils.DBHelper;
-import practice.hanchen.kknews.R;
-import practice.hanchen.kknews.adapter.PersonalArticleAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersonalArticleActivity extends ArticleActivity {
 	@Override

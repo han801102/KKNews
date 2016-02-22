@@ -1,4 +1,4 @@
-package practice.hanchen.kknews.fragment;
+package practice.hanchen.kknews;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.support.v4.preference.PreferenceFragment;
+import android.util.Log;
 
 import java.util.Calendar;
-
-import practice.hanchen.kknews.utils.DBHelper;
-import practice.hanchen.kknews.R;
 
 /**
  * Created by HanChen on 2016/2/2.
@@ -47,7 +45,7 @@ public class FragmentSetting extends PreferenceFragment {
 
 	public void resetAlarmManagerFreq(int time) {
 		Calendar cal = Calendar.getInstance();
-		Intent intent = new Intent(getActivity(), DBHelper.RSSCrawlerService.class);
+		Intent intent = new Intent(getActivity(), RSSCrawlerService.class);
 		PendingIntent pendingIntent = PendingIntent.getService(getActivity(), 0, intent, 0);
 		AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 		alarmManager.cancel(pendingIntent);

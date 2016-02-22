@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,13 +19,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.PersonalArticleActivity" >
+        <activity android:name=".PersonalArticleActivity" >
         </activity>
-        <activity android:name=".activity.ChannelArticleActivity" >
+        <activity android:name=".ChannelArticleActivity" >
         </activity>
 
         <service
-            android:name=".utils.DBHelper$RSSCrawlerService"
+            android:name=".RSSCrawlerService"
             android:enabled="true"
             android:exported="true" >
         </service>

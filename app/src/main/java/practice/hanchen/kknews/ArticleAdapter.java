@@ -1,9 +1,10 @@
-package practice.hanchen.kknews.adapter;
+package practice.hanchen.kknews;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import practice.hanchen.kknews.R;
-import practice.hanchen.kknews.dao.Article;
+import de.greenrobot.dao.query.QueryBuilder;
 
 /**
  * Created by HanChen on 2016/2/5.
