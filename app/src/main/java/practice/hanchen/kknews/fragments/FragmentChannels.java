@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.leakcanary.RefWatcher;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,6 +23,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import practice.hanchen.kknews.KKNewsApplication;
+import practice.hanchen.kknews.activities.MainActivity;
 import practice.hanchen.kknews.adapters.ChannelsAdapter;
 import practice.hanchen.kknews.dao.Channel;
 import practice.hanchen.kknews.helpers.DBHelper;
@@ -36,6 +40,7 @@ public class FragmentChannels extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		dbHelper = DBHelper.getInstance(getContext());
+
 	}
 
 	@Override
@@ -48,6 +53,13 @@ public class FragmentChannels extends Fragment {
 		ChannelsAdapter channelsAdapter = new ChannelsAdapter(getActivity(), loadChannelsFormDB());
 		recyclerView.setAdapter(channelsAdapter);
 		return view;
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		RefWatcher refWatcher = KKNewsApplication.getRefWatcher(getActivity());
+		refWatcher.watch(this);
 	}
 
 	private List<Channel> loadChannelsFormDB() {

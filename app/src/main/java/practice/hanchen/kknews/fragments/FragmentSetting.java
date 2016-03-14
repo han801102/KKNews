@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.support.v4.preference.PreferenceFragment;
 
+import com.squareup.leakcanary.RefWatcher;
+
 import java.util.Calendar;
 
+import practice.hanchen.kknews.KKNewsApplication;
 import practice.hanchen.kknews.R;
 import practice.hanchen.kknews.services.RSSCrawlerService;
 
@@ -43,6 +46,13 @@ public class FragmentSetting extends PreferenceFragment {
 				return true;
 			}
 		});
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		RefWatcher refWatcher = KKNewsApplication.getRefWatcher(getActivity());
+		refWatcher.watch(this);
 	}
 
 	public void resetAlarmManagerFreq(int time) {

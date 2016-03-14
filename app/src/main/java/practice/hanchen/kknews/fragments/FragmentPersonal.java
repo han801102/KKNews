@@ -11,6 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.leakcanary.RefWatcher;
+
+import practice.hanchen.kknews.KKNewsApplication;
 import practice.hanchen.kknews.helpers.DBHelper;
 import practice.hanchen.kknews.adapters.PersonalFolderAdapter;
 import practice.hanchen.kknews.R;
@@ -45,6 +48,13 @@ public class FragmentPersonal extends Fragment {
 			menu.findItem(R.id.action_accept).setVisible(false);
 			menu.findItem(R.id.action_cancel).setVisible(false);
 		}
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		RefWatcher refWatcher = KKNewsApplication.getRefWatcher(getActivity());
+		refWatcher.watch(this);
 	}
 
 	@Override
