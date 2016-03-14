@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import net.hockeyapp.android.CrashManager;
+
 import java.util.Calendar;
 
 import practice.hanchen.kknews.fragments.FragmentChannels;
@@ -60,6 +62,12 @@ public class MainActivity extends AppCompatActivity
 			Intent intent = new Intent(this, RSSCrawlerService.class);
 			startService(intent);
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		checkForCrashes();
 	}
 
 	@Override
@@ -114,5 +122,9 @@ public class MainActivity extends AppCompatActivity
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), time * 1000, pendingIntent);
 		startService(intent);
+	}
+
+	private void checkForCrashes() {
+		CrashManager.register(this);
 	}
 }

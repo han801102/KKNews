@@ -10,6 +10,7 @@ android {
 		targetSdkVersion 23
 		versionCode 1
 		versionName "1.0"
+		manifestPlaceholders = [HOCKEYAPP_APP_ID: "82497b1ebbc04f429b8579ef12911704"]
 	}
 	buildTypes {
 		release {
@@ -29,4 +30,5 @@ dependencies {
 	compile 'de.greenrobot:greendao:2.0.0'
 	compile 'com.android.support:support-v4-preferencefragment:1.0.0'
 	debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta1'
+	compile 'net.hockeyapp.android:HockeySDK:3.7.1'
 }
